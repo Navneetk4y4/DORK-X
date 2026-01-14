@@ -7,8 +7,11 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Shield, Search, AlertTriangle, CheckCircle } from 'lucide-react';
+import Link from 'next/link';
+import { Shield, Search, AlertTriangle, CheckCircle, BarChart3, List, FileText, ArrowRight, Zap, Target, Database } from 'lucide-react';
 import { validateTarget, createScan } from '@/lib/api-service';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 
 export default function Home() {
   const router = useRouter();
@@ -75,7 +78,9 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      {/* Hero Section */}
+      <Navbar />
+      
+      {/* Hero Section with Navigation */}
       <div className="container mx-auto px-4 py-16">
         <div className="text-center mb-12">
           <div className="flex items-center justify-center mb-6">
@@ -90,6 +95,48 @@ export default function Home() {
           <p className="text-sm text-red-400 font-semibold">
             ⚠️ FOR AUTHORIZED SECURITY TESTING ONLY ⚠️
           </p>
+        </div>
+
+        {/* Quick Navigation Cards */}
+        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-12">
+          <Link href="/dashboard" className="group">
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 text-white hover:bg-white/20 transition-all cursor-pointer border-2 border-transparent hover:border-purple-400">
+              <div className="flex items-center justify-between mb-3">
+                <BarChart3 className="w-8 h-8 text-purple-400" />
+                <ArrowRight className="w-5 h-5 text-purple-400 group-hover:translate-x-1 transition-transform" />
+              </div>
+              <h3 className="font-bold text-lg mb-2">Analytics Dashboard</h3>
+              <p className="text-sm text-gray-300">
+                View scan history, statistics, and comprehensive analytics with interactive charts
+              </p>
+            </div>
+          </Link>
+
+          <Link href="/categories" className="group">
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 text-white hover:bg-white/20 transition-all cursor-pointer border-2 border-transparent hover:border-purple-400">
+              <div className="flex items-center justify-between mb-3">
+                <List className="w-8 h-8 text-purple-400" />
+                <ArrowRight className="w-5 h-5 text-purple-400 group-hover:translate-x-1 transition-transform" />
+              </div>
+              <h3 className="font-bold text-lg mb-2">Dork Categories</h3>
+              <p className="text-sm text-gray-300">
+                Explore 20 specialized reconnaissance categories with 200+ query templates
+              </p>
+            </div>
+          </Link>
+
+          <Link href="http://localhost:8000/docs" target="_blank" rel="noopener noreferrer" className="group">
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 text-white hover:bg-white/20 transition-all cursor-pointer border-2 border-transparent hover:border-purple-400">
+              <div className="flex items-center justify-between mb-3">
+                <FileText className="w-8 h-8 text-purple-400" />
+                <ArrowRight className="w-5 h-5 text-purple-400 group-hover:translate-x-1 transition-transform" />
+              </div>
+              <h3 className="font-bold text-lg mb-2">API Documentation</h3>
+              <p className="text-sm text-gray-300">
+                Complete REST API reference with interactive Swagger documentation
+              </p>
+            </div>
+          </Link>
         </div>
 
         {/* Main Card */}
@@ -265,25 +312,36 @@ export default function Home() {
         {/* Feature Cards */}
         <div className="grid md:grid-cols-3 gap-6 mt-12 max-w-4xl mx-auto">
           <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 text-white">
-            <h3 className="font-bold mb-2">🎯 Automated Dorking</h3>
+            <div className="flex items-center justify-center w-12 h-12 bg-purple-500/20 rounded-lg mb-4">
+              <Zap className="w-6 h-6 text-purple-400" />
+            </div>
+            <h3 className="font-bold text-lg mb-2">Automated Dorking</h3>
             <p className="text-sm text-gray-300">
-              12+ categories of security-focused dork queries
+              20+ specialized reconnaissance categories with 200+ security-focused dork queries
             </p>
           </div>
           <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 text-white">
-            <h3 className="font-bold mb-2">🛡️ Risk Classification</h3>
+            <div className="flex items-center justify-center w-12 h-12 bg-purple-500/20 rounded-lg mb-4">
+              <Target className="w-6 h-6 text-purple-400" />
+            </div>
+            <h3 className="font-bold text-lg mb-2">Risk Classification</h3>
             <p className="text-sm text-gray-300">
-              Automatic severity assessment and OWASP mapping
+              Automatic severity assessment (CRITICAL/HIGH/MEDIUM) with detailed risk analysis
             </p>
           </div>
           <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 text-white">
-            <h3 className="font-bold mb-2">📄 Professional Reports</h3>
+            <div className="flex items-center justify-center w-12 h-12 bg-purple-500/20 rounded-lg mb-4">
+              <Database className="w-6 h-6 text-purple-400" />
+            </div>
+            <h3 className="font-bold text-lg mb-2">Comprehensive Reports</h3>
             <p className="text-sm text-gray-300">
-              Pentesting-grade reports in PDF/HTML/CSV
+              Professional pentesting-grade reports with detailed findings and remediation guidance
             </p>
           </div>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 }

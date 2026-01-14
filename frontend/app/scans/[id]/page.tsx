@@ -20,6 +20,8 @@ import {
 } from 'lucide-react';
 import { getScan, getScanFindings, getScanStatistics, generateReport } from '@/lib/api-service';
 import { formatDate, getRiskColor, getStatusColor } from '@/lib/utils';
+import Navbar from '@/app/components/Navbar';
+import Footer from '@/app/components/Footer';
 import type { Scan, Finding, ScanStatistics } from '@/lib/api-service';
 
 export default function ScanPage({ params }: { params: Promise<{ id: string }> }) {
@@ -99,35 +101,44 @@ export default function ScanPage({ params }: { params: Promise<{ id: string }> }
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="w-12 h-12 text-purple-600 animate-spin mx-auto mb-4" />
-          <p className="text-gray-600">Loading scan data...</p>
+      <div className="min-h-screen bg-gray-50">
+        <Navbar />
+        <div className="flex items-center justify-center" style={{ minHeight: 'calc(100vh - 200px)' }}>
+          <div className="text-center">
+            <Loader2 className="w-12 h-12 text-purple-600 animate-spin mx-auto mb-4" />
+            <p className="text-gray-600">Loading scan data...</p>
+          </div>
         </div>
+        <Footer />
       </div>
     );
   }
 
   if (error || !scan) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <XCircle className="w-12 h-12 text-red-600 mx-auto mb-4" />
-          <p className="text-gray-800 font-semibold mb-2">Error Loading Scan</p>
-          <p className="text-gray-600 mb-4">{error}</p>
-          <button
-            onClick={() => router.push('/')}
-            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
-          >
-            Back to Home
-          </button>
+      <div className="min-h-screen bg-gray-50">
+        <Navbar />
+        <div className="flex items-center justify-center" style={{ minHeight: 'calc(100vh - 200px)' }}>
+          <div className="text-center">
+            <XCircle className="w-12 h-12 text-red-600 mx-auto mb-4" />
+            <p className="text-gray-800 font-semibold mb-2">Error Loading Scan</p>
+            <p className="text-gray-600 mb-4">{error}</p>
+            <button
+              onClick={() => router.push('/')}
+              className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+            >
+              Back to Home
+            </button>
+          </div>
         </div>
+        <Footer />
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Navbar />
       {/* Header */}
       <div className="bg-white border-b">
         <div className="container mx-auto px-4 py-4">
@@ -280,6 +291,7 @@ export default function ScanPage({ params }: { params: Promise<{ id: string }> }
           </div>
         </div>
       )}
+      <Footer />
     </div>
   );
 }
