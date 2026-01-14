@@ -262,19 +262,46 @@ async def get_scan_statistics(scan_id: UUID, db: Session = Depends(get_db)):
     )
 
 
-@router.delete("/scans/{scan_id}", status_code=204)
-async def delete_scan(scan_id: UUID, db: Session = Depends(get_db)):
+@router.get("/dork-categories")
+async def get_dork_categories():
     """
-    Delete a scan and all associated data
+    Get all 20 dork categories with detailed metadata
+    Includes risk levels, what can be found, why it matters
     """
-    scan = db.query(Scan).filter(Scan.id == scan_id).first()
+    dork_service = DorkGeneratorService()
+    categories = dork_service.list_all_categories()
     
-    if not scan:
-        raise HTTPException(status_code=404, detail="Scan not found")
+    return {
+        "total_categories": len(categories),
+        "categories": sorted(categories, key=lambda x: x["name"]),
+        "summary": {
+            "critical_count": sum(1 for c in categories if c.get("risk_level") == "CRITICAL"),
+            "high_count": sum(1 for c in categories if c.get("risk_level") == "HIGH"),
+            "medium_count": sum(1 for c in categories if c.get("risk_level") == "MEDIUM"),
+        }
+    }
+
+
+@router.get("/dork-categories/{category_key}")
+async def get_dork_category_detail(category_key: str):
+    """
+    Get detailed information about a specific dork category
+    """
+    dork_service = DorkGeneratorService()
+    category_info = dork_service.get_category_info(category_key)
     
-    db.delete(scan)
-    db.commit()
+    if not category_info:
+        raise HTTPException(status_code=404, detail=f"Category '{category_key}' not found")
     
-    logger.info(f"🗑️ Scan deleted: {scan_id}")
+    # Add query count and templates
+    templates = dork_service.dork_templates.get(category_key, [])
     
+    return {
+        **category_info,
+        "key": category_key,
+        "query_count": len(templates),
+        "sample_templates": templates[:3]  # Show first 3 templates as examples
+    }
+
+
     return None
