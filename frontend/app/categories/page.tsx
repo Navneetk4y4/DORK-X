@@ -80,10 +80,10 @@ export default function CategoriesPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-black via-slate-950 to-black flex items-center justify-center">
         <Navbar />
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500"></div>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500"></div>
           <p className="mt-4 text-gray-400">Loading dork categories...</p>
         </div>
       </div>
@@ -93,11 +93,11 @@ export default function CategoriesPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 py-16">
+      <main className="min-h-screen bg-gradient-to-br from-black via-slate-950 to-black py-16">
         {/* Animated background elements */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-0 left-0 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl -translate-y-1/2 -translate-x-1/2"></div>
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-pink-600/20 rounded-full blur-3xl translate-y-1/2 translate-x-1/2"></div>
+          <div className="absolute top-0 left-0 w-96 h-96 bg-cyan-600/15 rounded-full blur-3xl -translate-y-1/2 -translate-x-1/2 animate-pulse"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-lime-600/15 rounded-full blur-3xl translate-y-1/2 translate-x-1/2 animate-pulse"></div>
         </div>
 
         <div className="max-w-6xl mx-auto px-6 relative z-10">
@@ -112,33 +112,33 @@ export default function CategoriesPage() {
 
           {/* Summary Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-            <div className="rounded-2xl bg-gradient-to-br from-red-500/10 to-orange-500/10 backdrop-blur-xl border border-red-500/30 p-6 hover:border-red-400/50 transition-all">
+            <div className="rounded-2xl bg-gradient-to-br from-red-500/15 to-orange-500/15 backdrop-blur-xl border border-red-500/30 p-6 hover:border-red-400/60 transition-all shadow-lg shadow-red-500/10">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-red-400 font-medium">CRITICAL Categories</p>
                   <p className="text-3xl font-bold text-red-300 mt-2">{summary.critical_count}</p>
                 </div>
-                <AlertCircle className="w-12 h-12 text-red-400 opacity-40" />
+                <AlertCircle className="w-12 h-12 text-red-400 opacity-60" />
               </div>
             </div>
 
-            <div className="rounded-2xl bg-gradient-to-br from-orange-500/10 to-yellow-500/10 backdrop-blur-xl border border-orange-500/30 p-6 hover:border-orange-400/50 transition-all">
+            <div className="rounded-2xl bg-gradient-to-br from-orange-500/15 to-yellow-500/15 backdrop-blur-xl border border-orange-500/30 p-6 hover:border-orange-400/60 transition-all shadow-lg shadow-orange-500/10">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-orange-400 font-medium">HIGH Risk Categories</p>
                   <p className="text-3xl font-bold text-orange-300 mt-2">{summary.high_count}</p>
                 </div>
-                <Zap className="w-12 h-12 text-orange-400 opacity-40" />
+                <Zap className="w-12 h-12 text-orange-400 opacity-60" />
               </div>
             </div>
 
-            <div className="rounded-2xl bg-gradient-to-br from-yellow-500/10 to-amber-500/10 backdrop-blur-xl border border-yellow-500/30 p-6 hover:border-yellow-400/50 transition-all">
+            <div className="rounded-2xl bg-gradient-to-br from-yellow-500/15 to-lime-500/15 backdrop-blur-xl border border-yellow-500/30 p-6 hover:border-yellow-400/60 transition-all shadow-lg shadow-yellow-500/10">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-yellow-400 font-medium">MEDIUM Risk Categories</p>
                   <p className="text-3xl font-bold text-yellow-300 mt-2">{summary.medium_count}</p>
                 </div>
-                <TrendingUp className="w-12 h-12 text-yellow-400 opacity-40" />
+                <TrendingUp className="w-12 h-12 text-yellow-400 opacity-60" />
               </div>
             </div>
           </div>
@@ -148,11 +148,11 @@ export default function CategoriesPage() {
             {categories.map((category) => (
               <div
                 key={category.key}
-                className="rounded-2xl bg-gradient-to-br from-slate-800/50 to-purple-800/50 backdrop-blur-2xl border border-white/20 overflow-hidden hover:border-white/30 transition-all hover:shadow-lg hover:shadow-purple-500/20"
+                className="rounded-2xl bg-gradient-to-br from-slate-900/60 to-black/60 backdrop-blur-2xl border border-cyan-500/30 overflow-hidden hover:border-cyan-500/60 transition-all hover:shadow-lg hover:shadow-cyan-500/20 shadow-lg shadow-cyan-500/10"
               >
                 <button
                   onClick={() => setExpandedCategory(expandedCategory === category.key ? null : category.key)}
-                  className="w-full px-8 py-6 flex items-start justify-between hover:bg-white/5 transition-colors"
+                  className="w-full px-8 py-6 flex items-start justify-between hover:bg-cyan-500/5 transition-colors"
                 >
                   <div className="flex-1 text-left">
                     <div className="flex items-center gap-3 mb-2">
@@ -169,18 +169,18 @@ export default function CategoriesPage() {
 
                 {/* Expanded Details */}
                 {expandedCategory === category.key && (
-                  <div className="border-t border-white/10 bg-gradient-to-br from-purple-500/5 to-pink-500/5 px-8 py-6">
+                  <div className="border-t border-cyan-500/20 bg-gradient-to-br from-cyan-500/5 to-lime-500/5 px-8 py-6">
                     <div className="space-y-6">
                       {/* What Can Be Found */}
                       <div>
                         <h4 className="font-semibold text-white mb-3 flex items-center gap-2">
-                          <Shield className="w-4 h-4 text-blue-400" />
+                          <Shield className="w-4 h-4 text-cyan-400" />
                           What Can Be Found
                         </h4>
                         <ul className="space-y-2 ml-6">
                           {category.what_can_be_found.map((item, idx) => (
                             <li key={idx} className="text-sm text-gray-300 flex items-start gap-2">
-                              <span className="text-purple-400 font-bold">•</span>
+                              <span className="text-lime-400 font-bold">•</span>
                               {item}
                             </li>
                           ))}

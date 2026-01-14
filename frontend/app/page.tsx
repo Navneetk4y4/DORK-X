@@ -77,30 +77,30 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950">
+    <div className="min-h-screen bg-gradient-to-br from-black via-slate-950 to-black">
       <Navbar />
       
-      {/* Animated background elements */}
+      {/* Animated background elements - Neon cyber aesthetic */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl -translate-y-1/2 -translate-x-1/2"></div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-pink-600/20 rounded-full blur-3xl translate-y-1/2 translate-x-1/2"></div>
+        <div className="absolute top-0 left-0 w-96 h-96 bg-cyan-500/15 rounded-full blur-3xl -translate-y-1/2 -translate-x-1/2 animate-pulse"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-lime-500/15 rounded-full blur-3xl translate-y-1/2 translate-x-1/2 animate-pulse" style={{ animationDelay: '1s' }}></div>
       </div>
       
       {/* Hero Section with Navigation */}
       <div className="container mx-auto px-6 py-20 relative z-10">
         <div className="text-center mb-16">
           <div className="flex items-center justify-center mb-8">
-            <div className="p-6 rounded-2xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all">
-              <Shield className="w-16 h-16 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400" />
+            <div className="p-6 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-lime-500/20 backdrop-blur-xl border border-cyan-400/50 hover:border-cyan-300 transition-all shadow-2xl shadow-cyan-500/30">
+              <Shield className="w-16 h-16 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-lime-400 to-cyan-400 animate-pulse" />
             </div>
           </div>
-          <h1 className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-200 to-white mb-4 leading-tight">
+          <h1 className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-lime-400 to-cyan-400 mb-4 leading-tight" style={{ textShadow: '0 0 30px rgba(0,213,255,0.5)' }}>
             DORK-X
           </h1>
           <p className="text-2xl text-gray-300 mb-3 font-light">
             Automated OSINT Reconnaissance Platform
           </p>
-          <div className="inline-block px-4 py-2 rounded-full bg-red-500/10 border border-red-500/30 backdrop-blur-xl">
+          <div className="inline-block px-4 py-2 rounded-full bg-red-500/15 border border-red-500/50 backdrop-blur-xl shadow-lg shadow-red-500/20">
             <p className="text-sm text-red-400 font-semibold">
               ⚠️ FOR AUTHORIZED SECURITY TESTING ONLY ⚠️
             </p>
@@ -110,12 +110,12 @@ export default function Home() {
         {/* Quick Navigation Cards */}
         <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-16">
           <Link href="/dashboard" className="group">
-            <div className="relative p-8 rounded-2xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 backdrop-blur-xl border border-white/10 hover:border-purple-400/50 transition-all duration-300 group-hover:from-purple-500/20 group-hover:to-pink-500/20 group-hover:shadow-lg group-hover:shadow-purple-500/20 overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-600/0 to-pink-600/0 group-hover:from-purple-600/10 group-hover:to-pink-600/10 transition-all duration-300"></div>
+            <div className="relative p-8 rounded-2xl bg-gradient-to-br from-cyan-500/10 to-blue-500/10 backdrop-blur-xl border border-cyan-400/30 hover:border-cyan-400 transition-all duration-300 group-hover:from-cyan-500/20 group-hover:to-blue-500/20 group-hover:shadow-xl group-hover:shadow-cyan-500/30 overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-cyan-600/0 to-blue-600/0 group-hover:from-cyan-600/10 group-hover:to-blue-600/10 transition-all duration-300"></div>
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">
-                  <BarChart3 className="w-10 h-10 text-purple-400 group-hover:text-purple-300 transition-colors" />
-                  <ArrowRight className="w-5 h-5 text-purple-400/60 group-hover:text-purple-300 group-hover:translate-x-1 transition-all" />
+                  <BarChart3 className="w-10 h-10 text-cyan-400 group-hover:text-cyan-300 transition-colors" />
+                  <ArrowRight className="w-5 h-5 text-cyan-400/60 group-hover:text-cyan-300 group-hover:translate-x-1 transition-all" />
                 </div>
                 <h3 className="font-bold text-lg mb-2 text-white">Analytics Dashboard</h3>
                 <p className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
@@ -126,12 +126,12 @@ export default function Home() {
           </Link>
 
           <Link href="/categories" className="group">
-            <div className="relative p-8 rounded-2xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 backdrop-blur-xl border border-white/10 hover:border-purple-400/50 transition-all duration-300 group-hover:from-purple-500/20 group-hover:to-pink-500/20 group-hover:shadow-lg group-hover:shadow-purple-500/20 overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-600/0 to-pink-600/0 group-hover:from-purple-600/10 group-hover:to-pink-600/10 transition-all duration-300"></div>
+            <div className="relative p-8 rounded-2xl bg-gradient-to-br from-lime-500/10 to-green-500/10 backdrop-blur-xl border border-lime-400/30 hover:border-lime-400 transition-all duration-300 group-hover:from-lime-500/20 group-hover:to-green-500/20 group-hover:shadow-xl group-hover:shadow-lime-500/30 overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-lime-600/0 to-green-600/0 group-hover:from-lime-600/10 group-hover:to-green-600/10 transition-all duration-300"></div>
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">
-                  <List className="w-10 h-10 text-purple-400 group-hover:text-purple-300 transition-colors" />
-                  <ArrowRight className="w-5 h-5 text-purple-400/60 group-hover:text-purple-300 group-hover:translate-x-1 transition-all" />
+                  <List className="w-10 h-10 text-lime-400 group-hover:text-lime-300 transition-colors" />
+                  <ArrowRight className="w-5 h-5 text-lime-400/60 group-hover:text-lime-300 group-hover:translate-x-1 transition-all" />
                 </div>
                 <h3 className="font-bold text-lg mb-2 text-white">Dork Categories</h3>
                 <p className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
@@ -142,12 +142,12 @@ export default function Home() {
           </Link>
 
           <Link href="http://localhost:8000/docs" target="_blank" rel="noopener noreferrer" className="group">
-            <div className="relative p-8 rounded-2xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 backdrop-blur-xl border border-white/10 hover:border-purple-400/50 transition-all duration-300 group-hover:from-purple-500/20 group-hover:to-pink-500/20 group-hover:shadow-lg group-hover:shadow-purple-500/20 overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-600/0 to-pink-600/0 group-hover:from-purple-600/10 group-hover:to-pink-600/10 transition-all duration-300"></div>
+            <div className="relative p-8 rounded-2xl bg-gradient-to-br from-orange-500/10 to-red-500/10 backdrop-blur-xl border border-orange-400/30 hover:border-orange-400 transition-all duration-300 group-hover:from-orange-500/20 group-hover:to-red-500/20 group-hover:shadow-xl group-hover:shadow-orange-500/30 overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-600/0 to-red-600/0 group-hover:from-orange-600/10 group-hover:to-red-600/10 transition-all duration-300"></div>
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">
-                  <FileText className="w-10 h-10 text-purple-400 group-hover:text-purple-300 transition-colors" />
-                  <ArrowRight className="w-5 h-5 text-purple-400/60 group-hover:text-purple-300 group-hover:translate-x-1 transition-all" />
+                  <FileText className="w-10 h-10 text-orange-400 group-hover:text-orange-300 transition-colors" />
+                  <ArrowRight className="w-5 h-5 text-orange-400/60 group-hover:text-orange-300 group-hover:translate-x-1 transition-all" />
                 </div>
                 <h3 className="font-bold text-lg mb-2 text-white">API Documentation</h3>
                 <p className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
@@ -160,18 +160,18 @@ export default function Home() {
 
         {/* Main Card */}
         <div className="max-w-2xl mx-auto">
-          <div className="rounded-3xl bg-gradient-to-br from-slate-800/50 to-purple-800/50 backdrop-blur-2xl border border-white/20 shadow-2xl p-10 hover:border-white/30 transition-all">
+          <div className="rounded-3xl bg-gradient-to-br from-slate-900/60 to-black/60 backdrop-blur-2xl border border-cyan-500/30 shadow-2xl shadow-cyan-500/20 p-10 hover:border-cyan-400/50 transition-all">
             {!showDisclaimer ? (
               // Step 1: Target Input
               <>
-                <h2 className="text-3xl font-bold text-white mb-8">
+                <h2 className="text-3xl font-bold text-cyan-400 mb-8" style={{ textShadow: '0 0 20px rgba(0,213,255,0.3)' }}>
                   Start New Scan
                 </h2>
 
                 <div className="space-y-6">
                   {/* Target Domain Input */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-200 mb-3">
+                    <label className="block text-sm font-medium text-cyan-300 mb-3">
                       Target Domain
                     </label>
                     <input
@@ -179,7 +179,7 @@ export default function Home() {
                       placeholder="example.com"
                       value={targetDomain}
                       onChange={(e) => setTargetDomain(e.target.value)}
-                      className="w-full px-4 py-3 border border-white/20 rounded-xl bg-white/5 backdrop-blur-xl focus:ring-2 focus:ring-purple-400 focus:border-transparent text-white placeholder-gray-400 transition-all"
+                      className="w-full px-4 py-3 border border-cyan-500/30 rounded-xl bg-black/40 backdrop-blur-xl focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 text-cyan-400 placeholder-gray-500 transition-all shadow-lg shadow-cyan-500/10"
                       onKeyPress={(e) => e.key === 'Enter' && handleValidate()}
                     />
                     <p className="text-xs text-gray-400 mt-2">
@@ -189,7 +189,7 @@ export default function Home() {
 
                   {/* Scan Profile */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-200 mb-3">
+                    <label className="block text-sm font-medium text-lime-300 mb-3">
                       Scan Profile
                     </label>
                     <div className="grid grid-cols-3 gap-3">
@@ -199,8 +199,8 @@ export default function Home() {
                           onClick={() => setScanProfile(profile as any)}
                           className={`py-3 px-4 rounded-xl border-2 font-medium transition-all ${
                             scanProfile === profile
-                              ? 'border-purple-400 bg-gradient-to-br from-purple-500/40 to-pink-500/40 text-white backdrop-blur-xl'
-                              : 'border-white/20 bg-white/5 text-gray-300 hover:border-purple-400/50 hover:bg-white/10 backdrop-blur-xl'
+                              ? 'border-lime-400 bg-gradient-to-br from-lime-500/30 to-cyan-500/30 text-lime-300 backdrop-blur-xl shadow-lg shadow-lime-500/20'
+                              : 'border-cyan-500/30 bg-black/40 text-gray-400 hover:border-lime-400/50 hover:bg-black/60 backdrop-blur-xl'
                           }`}
                         >
                           {profile.charAt(0).toUpperCase() + profile.slice(1)}
@@ -216,13 +216,13 @@ export default function Home() {
 
                   {/* Validation Result */}
                   {validationResult && validationResult.valid && (
-                    <div className="flex items-start space-x-3 p-4 bg-gradient-to-br from-green-500/10 to-emerald-500/10 border border-green-500/30 rounded-xl backdrop-blur-xl">
-                      <CheckCircle className="w-5 h-5 text-green-400 mt-0.5" />
+                    <div className="flex items-start space-x-3 p-4 bg-gradient-to-br from-lime-500/10 to-green-500/10 border border-lime-500/50 rounded-xl backdrop-blur-xl shadow-lg shadow-lime-500/20">
+                      <CheckCircle className="w-5 h-5 text-lime-400 mt-0.5" />
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-green-300">
+                        <p className="text-sm font-medium text-lime-300">
                           Target Validated
                         </p>
-                        <p className="text-sm text-green-400">
+                        <p className="text-sm text-lime-400">
                           {validationResult.normalized_target}
                         </p>
                       </div>
@@ -231,7 +231,7 @@ export default function Home() {
 
                   {/* Error Message */}
                   {error && (
-                    <div className="flex items-start space-x-3 p-4 bg-gradient-to-br from-red-500/10 to-orange-500/10 border border-red-500/30 rounded-xl backdrop-blur-xl">
+                    <div className="flex items-start space-x-3 p-4 bg-gradient-to-br from-red-500/10 to-orange-500/10 border border-red-500/50 rounded-xl backdrop-blur-xl shadow-lg shadow-red-500/20">
                       <AlertTriangle className="w-5 h-5 text-red-400 mt-0.5" />
                       <div className="flex-1">
                         <p className="text-sm font-medium text-red-300">Error</p>
@@ -244,7 +244,7 @@ export default function Home() {
                   <button
                     onClick={handleValidate}
                     disabled={isValidating || !targetDomain.trim()}
-                    className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-purple-500 hover:to-pink-500 disabled:from-gray-500 disabled:to-gray-600 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-purple-500/50"
+                    className="w-full bg-gradient-to-r from-cyan-500 to-lime-500 text-black py-3 px-6 rounded-xl font-semibold hover:from-cyan-400 hover:to-lime-400 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg shadow-cyan-500/50 hover:shadow-cyan-400/60"
                   >
                     <Search className="w-5 h-5" />
                     <span>{isValidating ? 'Validating...' : 'Validate Target'}</span>
@@ -254,16 +254,16 @@ export default function Home() {
             ) : (
               // Step 2: Legal Disclaimer
               <>
-                <h2 className="text-3xl font-bold text-white mb-8">
+                <h2 className="text-3xl font-bold text-cyan-400 mb-8" style={{ textShadow: '0 0 20px rgba(0,213,255,0.3)' }}>
                   Legal Disclaimer & Authorization
                 </h2>
 
                 <div className="space-y-6">
-                  <div className="bg-gradient-to-br from-yellow-500/10 to-orange-500/10 border-2 border-yellow-500/30 rounded-xl p-6 backdrop-blur-xl">
-                    <h3 className="font-bold text-yellow-300 mb-4">
+                  <div className="bg-gradient-to-br from-red-500/15 to-orange-500/15 border-2 border-red-500/50 rounded-xl p-6 backdrop-blur-xl shadow-lg shadow-red-500/20">
+                    <h3 className="font-bold text-red-400 mb-4" style={{ textShadow: '0 0 10px rgba(255,0,0,0.3)' }}>
                       ⚖️ IMPORTANT LEGAL NOTICE
                     </h3>
-                    <div className="space-y-3 text-sm text-yellow-200/90">
+                    <div className="space-y-3 text-sm text-red-300/90">
                       <p>
                         By proceeding, you acknowledge and agree that:
                       </p>
@@ -279,23 +279,23 @@ export default function Home() {
                   </div>
 
                   {/* Consent Checkbox */}
-                  <div className="flex items-start space-x-3 p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-xl">
+                  <div className="flex items-start space-x-3 p-4 rounded-xl bg-black/40 border border-cyan-500/30 backdrop-blur-xl">
                     <input
                       type="checkbox"
                       id="consent"
                       checked={consentAccepted}
                       onChange={(e) => setConsentAccepted(e.target.checked)}
-                      className="mt-1 w-5 h-5 text-purple-400 border-white/20 rounded focus:ring-purple-500"
+                      className="mt-1 w-5 h-5 text-cyan-400 border-cyan-500/50 rounded focus:ring-cyan-400 accent-cyan-400"
                     />
                     <label htmlFor="consent" className="text-sm text-gray-300">
                       I have read and understand the legal disclaimer. I confirm that I have proper authorization to scan{' '}
-                      <strong className="text-white">{validationResult.normalized_target}</strong> and will use the results responsibly and ethically.
+                      <strong className="text-cyan-400">{validationResult.normalized_target}</strong> and will use the results responsibly and ethically.
                     </label>
                   </div>
 
                   {/* Error Message */}
                   {error && (
-                    <div className="flex items-start space-x-3 p-4 bg-gradient-to-br from-red-500/10 to-orange-500/10 border border-red-500/30 rounded-xl backdrop-blur-xl">
+                    <div className="flex items-start space-x-3 p-4 bg-gradient-to-br from-red-500/15 to-orange-500/15 border border-red-500/50 rounded-xl backdrop-blur-xl shadow-lg shadow-red-500/20">
                       <AlertTriangle className="w-5 h-5 text-red-400 mt-0.5" />
                       <div className="flex-1">
                         <p className="text-sm text-red-400">{error}</p>
@@ -310,14 +310,14 @@ export default function Home() {
                         setShowDisclaimer(false);
                         setConsentAccepted(false);
                       }}
-                      className="flex-1 bg-gradient-to-r from-gray-700/50 to-slate-700/50 text-white py-3 px-6 rounded-xl font-semibold hover:from-gray-600/50 hover:to-slate-600/50 transition-all border border-white/10 backdrop-blur-xl"
+                      className="flex-1 bg-gradient-to-r from-gray-700/60 to-slate-800/60 text-gray-300 py-3 px-6 rounded-xl font-semibold hover:from-gray-600/60 hover:to-slate-700/60 transition-all border border-cyan-500/20 backdrop-blur-xl shadow-lg hover:border-cyan-500/40"
                     >
                       Cancel
                     </button>
                     <button
                       onClick={handleStartScan}
                       disabled={!consentAccepted || isCreatingScan}
-                      className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-purple-500 hover:to-pink-500 disabled:from-gray-500 disabled:to-gray-600 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-purple-500/50"
+                      className="flex-1 bg-gradient-to-r from-lime-500 to-cyan-500 text-black py-3 px-6 rounded-xl font-semibold hover:from-lime-400 hover:to-cyan-400 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed transition-all shadow-lg shadow-lime-500/50 hover:shadow-lime-400/60"
                     >
                       {isCreatingScan ? 'Initiating Scan...' : 'Start Scan'}
                     </button>
@@ -330,11 +330,11 @@ export default function Home() {
 
         {/* Feature Cards */}
         <div className="grid md:grid-cols-3 gap-8 mt-16 max-w-4xl mx-auto">
-          <div className="relative p-6 rounded-2xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 backdrop-blur-xl border border-white/10 hover:border-purple-400/50 transition-all duration-300 group hover:from-purple-500/20 hover:to-pink-500/20 hover:shadow-lg hover:shadow-purple-500/20">
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-600/0 to-pink-600/0 group-hover:from-purple-600/5 group-hover:to-pink-600/5 transition-all duration-300 rounded-2xl"></div>
+          <div className="relative p-6 rounded-2xl bg-gradient-to-br from-cyan-500/10 to-blue-500/10 backdrop-blur-xl border border-cyan-500/30 hover:border-cyan-400/60 transition-all duration-300 group hover:from-cyan-500/20 hover:to-blue-500/20 hover:shadow-lg hover:shadow-cyan-500/30">
+            <div className="absolute inset-0 bg-gradient-to-br from-cyan-600/0 to-blue-600/0 group-hover:from-cyan-600/5 group-hover:to-blue-600/5 transition-all duration-300 rounded-2xl"></div>
             <div className="relative z-10">
-              <div className="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-purple-500/30 to-pink-500/30 rounded-xl mb-4 group-hover:from-purple-500/50 group-hover:to-pink-500/50 transition-all">
-                <Zap className="w-7 h-7 text-purple-300" />
+              <div className="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-cyan-500/30 to-blue-500/30 rounded-xl mb-4 group-hover:from-cyan-500/50 group-hover:to-blue-500/50 transition-all">
+                <Zap className="w-7 h-7 text-cyan-400" />
               </div>
               <h3 className="font-bold text-lg mb-3 text-white">Automated Dorking</h3>
               <p className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
@@ -342,11 +342,11 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <div className="relative p-6 rounded-2xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 backdrop-blur-xl border border-white/10 hover:border-purple-400/50 transition-all duration-300 group hover:from-purple-500/20 hover:to-pink-500/20 hover:shadow-lg hover:shadow-purple-500/20">
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-600/0 to-pink-600/0 group-hover:from-purple-600/5 group-hover:to-pink-600/5 transition-all duration-300 rounded-2xl"></div>
+          <div className="relative p-6 rounded-2xl bg-gradient-to-br from-lime-500/10 to-green-500/10 backdrop-blur-xl border border-lime-500/30 hover:border-lime-400/60 transition-all duration-300 group hover:from-lime-500/20 hover:to-green-500/20 hover:shadow-lg hover:shadow-lime-500/30">
+            <div className="absolute inset-0 bg-gradient-to-br from-lime-600/0 to-green-600/0 group-hover:from-lime-600/5 group-hover:to-green-600/5 transition-all duration-300 rounded-2xl"></div>
             <div className="relative z-10">
-              <div className="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-purple-500/30 to-pink-500/30 rounded-xl mb-4 group-hover:from-purple-500/50 group-hover:to-pink-500/50 transition-all">
-                <Target className="w-7 h-7 text-purple-300" />
+              <div className="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-lime-500/30 to-green-500/30 rounded-xl mb-4 group-hover:from-lime-500/50 group-hover:to-green-500/50 transition-all">
+                <Target className="w-7 h-7 text-lime-400" />
               </div>
               <h3 className="font-bold text-lg mb-3 text-white">Risk Classification</h3>
               <p className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
@@ -354,11 +354,11 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <div className="relative p-6 rounded-2xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 backdrop-blur-xl border border-white/10 hover:border-purple-400/50 transition-all duration-300 group hover:from-purple-500/20 hover:to-pink-500/20 hover:shadow-lg hover:shadow-purple-500/20">
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-600/0 to-pink-600/0 group-hover:from-purple-600/5 group-hover:to-pink-600/5 transition-all duration-300 rounded-2xl"></div>
+          <div className="relative p-6 rounded-2xl bg-gradient-to-br from-orange-500/10 to-red-500/10 backdrop-blur-xl border border-orange-500/30 hover:border-orange-400/60 transition-all duration-300 group hover:from-orange-500/20 hover:to-red-500/20 hover:shadow-lg hover:shadow-orange-500/30">
+            <div className="absolute inset-0 bg-gradient-to-br from-orange-600/0 to-red-600/0 group-hover:from-orange-600/5 group-hover:to-red-600/5 transition-all duration-300 rounded-2xl"></div>
             <div className="relative z-10">
-              <div className="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-purple-500/30 to-pink-500/30 rounded-xl mb-4 group-hover:from-purple-500/50 group-hover:to-pink-500/50 transition-all">
-                <Database className="w-7 h-7 text-purple-300" />
+              <div className="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-orange-500/30 to-red-500/30 rounded-xl mb-4 group-hover:from-orange-500/50 group-hover:to-red-500/50 transition-all">
+                <Database className="w-7 h-7 text-orange-400" />
               </div>
               <h3 className="font-bold text-lg mb-3 text-white">Comprehensive Reports</h3>
               <p className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
