@@ -30,7 +30,7 @@ RUN mkdir -p /backend/reports
 # ============================================
 # STAGE 2: Frontend Builder
 # ============================================
-FROM node:18-alpine AS frontend-builder
+FROM node:20-alpine AS frontend-builder
 
 WORKDIR /frontend
 
