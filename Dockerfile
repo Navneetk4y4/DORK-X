@@ -90,7 +90,7 @@ CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
 # ============================================
 # STAGE 4: Frontend Runtime
 # ============================================
-FROM node:18-alpine AS frontend-runtime
+FROM node:20-alpine AS frontend-runtime
 
 WORKDIR /app
 

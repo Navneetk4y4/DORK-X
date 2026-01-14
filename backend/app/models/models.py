@@ -111,7 +111,7 @@ class Finding(Base):
     remediation = Column(Text)
     discovered_at = Column(DateTime(timezone=True), server_default=func.now(), index=True)
     is_false_positive = Column(Boolean, default=False)
-    metadata = Column(JSON)  # Additional metadata as JSON
+    additional_metadata = Column(JSON)  # Additional metadata as JSON
     
     # Relationships
     scan = relationship("Scan", back_populates="findings")
