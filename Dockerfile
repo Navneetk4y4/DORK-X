@@ -75,13 +75,13 @@ RUN mkdir -p /app/core && \
     mkdir -p /app/services && \
     mkdir -p /app/api
 
-# Copy backend core modules (if they exist)
-COPY backend/app/main.py ./main.py 2>/dev/null || true
-COPY backend/app/core ./core/ 2>/dev/null || true
-COPY backend/app/models ./models/ 2>/dev/null || true
-COPY backend/app/schemas ./schemas/ 2>/dev/null || true
-COPY backend/app/services ./services/ 2>/dev/null || true
-COPY backend/app/api ./api/ 2>/dev/null || true
+# Copy backend core modules
+COPY backend/app/main.py ./main.py
+COPY backend/app/core ./core/
+COPY backend/app/models ./models/
+COPY backend/app/schemas ./schemas/
+COPY backend/app/services ./services/
+COPY backend/app/api ./api/
 
 EXPOSE 8000
 
