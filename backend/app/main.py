@@ -37,8 +37,8 @@ async def lifespan(app: FastAPI):
     logger.info(f"Debug Mode: {settings.DEBUG}")
     
     # Create database tables
-    # Base.metadata.create_all(bind=engine)
-    logger.info("✅ Database tables verified")
+    Base.metadata.create_all(bind=engine)
+    logger.info("✅ Database tables created/verified")
     
     yield
     

@@ -118,7 +118,7 @@ class Finding(Base):
     query = relationship("DorkQuery", back_populates="findings")
     
     def __repr__(self):
-        return f"<Finding {self.id} - {self.risk_level.value}>"
+        return f"<Finding {self.id} - {self.risk_level}>"
 
 
 class AuditLog(Base):
