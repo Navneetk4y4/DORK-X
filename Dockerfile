@@ -101,7 +101,7 @@ RUN apk add --no-cache dumb-init
 COPY --from=frontend-builder /frontend/node_modules ./node_modules
 COPY --from=frontend-builder /frontend/.next ./.next
 COPY --from=frontend-builder /frontend/public ./public
-COPY --from=frontend-builder /frontend/next.config.js ./
+COPY --from=frontend-builder /frontend/next.config.ts ./
 COPY --from=frontend-builder /frontend/package*.json ./
 
 EXPOSE 3000
