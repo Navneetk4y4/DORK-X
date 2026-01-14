@@ -104,7 +104,185 @@ cd frontend
 npm run dev
 ```
 
-Access at: http://localhost:3000
+Access dashboard at: **http://localhost:3000**
+
+---
+
+## 🚀 Running Your First Scan
+
+1. Navigate to http://localhost:3000
+2. Enter target domain (e.g., `example.com`)
+3. Accept the legal disclaimer
+4. Select scan profile:
+   - **Quick**: ~10 queries (fast testing)
+   - **Standard**: ~44 queries (recommended)
+   - **Deep**: ~100+ queries (thorough)
+5. Click "Start Scan"
+6. View real-time results as Google returns findings
+
+---
+
+## Access Points
+
+| Service | URL |
+|---------|-----|
+| Dashboard | http://localhost:3000 |
+| Backend API | http://localhost:8000 |
+| API Docs (Swagger) | http://localhost:8000/docs |
+| Health Check | http://localhost:8000/api/v1/health |
+
+---
+
+## Understanding Scan Results
+
+### Risk Levels
+- **CRITICAL**: Credentials, API keys, database exposure
+- **HIGH**: Backup files, source code, database dumps  
+- **MEDIUM**: Admin panels, login pages, configurations
+- **LOW**: Cloud storage, error messages, Git exposure
+- **INFO**: General indexed content
+
+### Finding Categories
+- `credentials` - Leaked passwords/secrets
+- `backup_files` - Exposed backups
+- `admin_panels` - Administrative interfaces
+- `database_dumps` - Database files
+- `source_code` - Exposed code repositories
+- `cloud_storage` - S3/Azure/GCS links
+- `error_messages` - Stack traces
+
+---
+
+## API Quota Management
+
+**Google Custom Search Free Tier:**
+- 100 queries per day
+- Resets at midnight Pacific Time
+
+**Scan Profile Usage:**
+- Quick: ~10% of daily quota
+- Standard: ~44% of daily quota
+- Deep: ~100% of daily quota
+
+**Tip**: Use Quick scans for testing, Standard for assessments.
+
+---
+
+## Troubleshooting
+
+### "0 findings" after scan
+- Verify Google API keys in `backend/.env`
+- Ensure CSE is set to "Search the entire web"
+- Try a well-known domain first (e.g., `github.com`)
+- Check backend terminal for API errors
+
+### Backend won't start
+- Activate venv: `source .venv/bin/activate`
+- Verify Python 3.11+: `python --version`
+- Check logs for import errors
+
+### Frontend won't start
+- Delete and reinstall: `rm -rf node_modules && npm install`
+- Clear cache: `rm -rf .next`
+- Ensure Node.js 18+: `node --version`
+
+### API quota exceeded
+- Backend logs show 429 errors
+- Wait until midnight PT for reset
+- Or subscribe to paid tier
+
+---
+
+## ⚙️ Advanced Configuration
+
+### Backend Environment Variables (`backend/.env`)
+
+**Core Settings:**
+```
+DATABASE_URL=sqlite:///./dorkx.db
+SECRET_KEY=dev-secret-key
+ENVIRONMENT=development
+DEBUG=True
+```
+
+**Search Engines:**
+```
+GOOGLE_API_KEY=your-google-api-key
+GOOGLE_CSE_ID=your-custom-search-engine-id
+BING_API_KEY=optional
+```
+
+**Rate Limiting:**
+```
+MAX_QUERIES_PER_DAY=100
+MAX_QUERIES_PER_SESSION=20
+QUERY_DELAY_SECONDS=3
+```
+
+### Get Google API Keys
+
+1. **Google Custom Search API:**
+   - Visit: https://developers.google.com/custom-search/v1/overview
+   - Create project in Google Cloud Console
+   - Enable Custom Search API
+   - Create API Key credentials
+
+2. **Custom Search Engine (CSE):**
+   - Go to: https://cse.google.com/cse/
+   - Create new search engine
+   - **IMPORTANT:** Select "Search the entire web"
+   - Copy your Search Engine ID
+
+### Frontend Environment (`frontend/.env.local`)
+
+```
+NEXT_PUBLIC_API_URL=http://localhost:8000
+```
+
+---
+
+## 📚 Project Structure
+
+```
+DORK-X/
+├── backend/              # FastAPI Backend
+│   ├── app/
+│   │   ├── api/         # REST endpoints
+│   │   ├── services/    # Google Search API client
+│   │   ├── models/      # Database models
+│   │   └── main.py
+│   ├── requirements.txt
+│   └── .env            # Configuration
+│
+├── frontend/            # Next.js Frontend
+│   ├── app/            # Pages (App Router)
+│   ├── lib/            # API utilities
+│   └── package.json
+│
+└── README.md           # This file
+```
+
+---
+
+## 🧪 Testing
+
+**Verify Backend Health:**
+```bash
+curl http://localhost:8000/api/v1/health
+```
+
+**API Documentation:**
+- Swagger UI: http://localhost:8000/docs
+- ReDoc: http://localhost:8000/redoc
+
+---
+
+## 📝 Tips for Development
+
+- **Quick scan testing:** Use Quick profile (~10 queries) to test without exhausting daily quota
+- **Monitor quotas:** Google free tier provides 100 queries/day
+- **View logs:** Backend logs show all API calls and errors
+- **Database:** SQLite stores all scans in `backend/dorkx.db` (auto-created)
 
 ## 🔧 Configuration
 
