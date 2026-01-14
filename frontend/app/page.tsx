@@ -77,82 +77,101 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950">
       <Navbar />
       
+      {/* Animated background elements */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-0 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl -translate-y-1/2 -translate-x-1/2"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-pink-600/20 rounded-full blur-3xl translate-y-1/2 translate-x-1/2"></div>
+      </div>
+      
       {/* Hero Section with Navigation */}
-      <div className="container mx-auto px-4 py-16">
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center mb-6">
-            <Shield className="w-16 h-16 text-purple-400" />
+      <div className="container mx-auto px-6 py-20 relative z-10">
+        <div className="text-center mb-16">
+          <div className="flex items-center justify-center mb-8">
+            <div className="p-6 rounded-2xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all">
+              <Shield className="w-16 h-16 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400" />
+            </div>
           </div>
-          <h1 className="text-5xl font-bold text-white mb-4">
+          <h1 className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-200 to-white mb-4 leading-tight">
             DORK-X
           </h1>
-          <p className="text-xl text-gray-300 mb-2">
+          <p className="text-2xl text-gray-300 mb-3 font-light">
             Automated OSINT Reconnaissance Platform
           </p>
-          <p className="text-sm text-red-400 font-semibold">
-            ⚠️ FOR AUTHORIZED SECURITY TESTING ONLY ⚠️
-          </p>
+          <div className="inline-block px-4 py-2 rounded-full bg-red-500/10 border border-red-500/30 backdrop-blur-xl">
+            <p className="text-sm text-red-400 font-semibold">
+              ⚠️ FOR AUTHORIZED SECURITY TESTING ONLY ⚠️
+            </p>
+          </div>
         </div>
 
         {/* Quick Navigation Cards */}
-        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-12">
+        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-16">
           <Link href="/dashboard" className="group">
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 text-white hover:bg-white/20 transition-all cursor-pointer border-2 border-transparent hover:border-purple-400">
-              <div className="flex items-center justify-between mb-3">
-                <BarChart3 className="w-8 h-8 text-purple-400" />
-                <ArrowRight className="w-5 h-5 text-purple-400 group-hover:translate-x-1 transition-transform" />
+            <div className="relative p-8 rounded-2xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 backdrop-blur-xl border border-white/10 hover:border-purple-400/50 transition-all duration-300 group-hover:from-purple-500/20 group-hover:to-pink-500/20 group-hover:shadow-lg group-hover:shadow-purple-500/20 overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-600/0 to-pink-600/0 group-hover:from-purple-600/10 group-hover:to-pink-600/10 transition-all duration-300"></div>
+              <div className="relative z-10">
+                <div className="flex items-center justify-between mb-4">
+                  <BarChart3 className="w-10 h-10 text-purple-400 group-hover:text-purple-300 transition-colors" />
+                  <ArrowRight className="w-5 h-5 text-purple-400/60 group-hover:text-purple-300 group-hover:translate-x-1 transition-all" />
+                </div>
+                <h3 className="font-bold text-lg mb-2 text-white">Analytics Dashboard</h3>
+                <p className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
+                  View scan history, statistics, and comprehensive analytics with interactive charts
+                </p>
               </div>
-              <h3 className="font-bold text-lg mb-2">Analytics Dashboard</h3>
-              <p className="text-sm text-gray-300">
-                View scan history, statistics, and comprehensive analytics with interactive charts
-              </p>
             </div>
           </Link>
 
           <Link href="/categories" className="group">
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 text-white hover:bg-white/20 transition-all cursor-pointer border-2 border-transparent hover:border-purple-400">
-              <div className="flex items-center justify-between mb-3">
-                <List className="w-8 h-8 text-purple-400" />
-                <ArrowRight className="w-5 h-5 text-purple-400 group-hover:translate-x-1 transition-transform" />
+            <div className="relative p-8 rounded-2xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 backdrop-blur-xl border border-white/10 hover:border-purple-400/50 transition-all duration-300 group-hover:from-purple-500/20 group-hover:to-pink-500/20 group-hover:shadow-lg group-hover:shadow-purple-500/20 overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-600/0 to-pink-600/0 group-hover:from-purple-600/10 group-hover:to-pink-600/10 transition-all duration-300"></div>
+              <div className="relative z-10">
+                <div className="flex items-center justify-between mb-4">
+                  <List className="w-10 h-10 text-purple-400 group-hover:text-purple-300 transition-colors" />
+                  <ArrowRight className="w-5 h-5 text-purple-400/60 group-hover:text-purple-300 group-hover:translate-x-1 transition-all" />
+                </div>
+                <h3 className="font-bold text-lg mb-2 text-white">Dork Categories</h3>
+                <p className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
+                  Explore 20 specialized reconnaissance categories with 200+ query templates
+                </p>
               </div>
-              <h3 className="font-bold text-lg mb-2">Dork Categories</h3>
-              <p className="text-sm text-gray-300">
-                Explore 20 specialized reconnaissance categories with 200+ query templates
-              </p>
             </div>
           </Link>
 
           <Link href="http://localhost:8000/docs" target="_blank" rel="noopener noreferrer" className="group">
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 text-white hover:bg-white/20 transition-all cursor-pointer border-2 border-transparent hover:border-purple-400">
-              <div className="flex items-center justify-between mb-3">
-                <FileText className="w-8 h-8 text-purple-400" />
-                <ArrowRight className="w-5 h-5 text-purple-400 group-hover:translate-x-1 transition-transform" />
+            <div className="relative p-8 rounded-2xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 backdrop-blur-xl border border-white/10 hover:border-purple-400/50 transition-all duration-300 group-hover:from-purple-500/20 group-hover:to-pink-500/20 group-hover:shadow-lg group-hover:shadow-purple-500/20 overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-600/0 to-pink-600/0 group-hover:from-purple-600/10 group-hover:to-pink-600/10 transition-all duration-300"></div>
+              <div className="relative z-10">
+                <div className="flex items-center justify-between mb-4">
+                  <FileText className="w-10 h-10 text-purple-400 group-hover:text-purple-300 transition-colors" />
+                  <ArrowRight className="w-5 h-5 text-purple-400/60 group-hover:text-purple-300 group-hover:translate-x-1 transition-all" />
+                </div>
+                <h3 className="font-bold text-lg mb-2 text-white">API Documentation</h3>
+                <p className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
+                  Complete REST API reference with interactive Swagger documentation
+                </p>
               </div>
-              <h3 className="font-bold text-lg mb-2">API Documentation</h3>
-              <p className="text-sm text-gray-300">
-                Complete REST API reference with interactive Swagger documentation
-              </p>
             </div>
           </Link>
         </div>
 
         {/* Main Card */}
         <div className="max-w-2xl mx-auto">
-          <div className="bg-white rounded-lg shadow-2xl p-8">
+          <div className="rounded-3xl bg-gradient-to-br from-slate-800/50 to-purple-800/50 backdrop-blur-2xl border border-white/20 shadow-2xl p-10 hover:border-white/30 transition-all">
             {!showDisclaimer ? (
               // Step 1: Target Input
               <>
-                <h2 className="text-2xl font-bold text-gray-800 mb-6">
+                <h2 className="text-3xl font-bold text-white mb-8">
                   Start New Scan
                 </h2>
 
                 <div className="space-y-6">
                   {/* Target Domain Input */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-200 mb-3">
                       Target Domain
                     </label>
                     <input
@@ -160,17 +179,17 @@ export default function Home() {
                       placeholder="example.com"
                       value={targetDomain}
                       onChange={(e) => setTargetDomain(e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900"
+                      className="w-full px-4 py-3 border border-white/20 rounded-xl bg-white/5 backdrop-blur-xl focus:ring-2 focus:ring-purple-400 focus:border-transparent text-white placeholder-gray-400 transition-all"
                       onKeyPress={(e) => e.key === 'Enter' && handleValidate()}
                     />
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-xs text-gray-400 mt-2">
                       Enter the domain you have authorization to scan
                     </p>
                   </div>
 
                   {/* Scan Profile */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-200 mb-3">
                       Scan Profile
                     </label>
                     <div className="grid grid-cols-3 gap-3">
@@ -178,17 +197,17 @@ export default function Home() {
                         <button
                           key={profile}
                           onClick={() => setScanProfile(profile as any)}
-                          className={`py-3 px-4 rounded-lg border-2 font-medium transition-all ${
+                          className={`py-3 px-4 rounded-xl border-2 font-medium transition-all ${
                             scanProfile === profile
-                              ? 'border-purple-500 bg-purple-50 text-purple-700'
-                              : 'border-gray-300 bg-white text-gray-700 hover:border-purple-300'
+                              ? 'border-purple-400 bg-gradient-to-br from-purple-500/40 to-pink-500/40 text-white backdrop-blur-xl'
+                              : 'border-white/20 bg-white/5 text-gray-300 hover:border-purple-400/50 hover:bg-white/10 backdrop-blur-xl'
                           }`}
                         >
                           {profile.charAt(0).toUpperCase() + profile.slice(1)}
                         </button>
                       ))}
                     </div>
-                    <div className="mt-2 text-xs text-gray-600">
+                    <div className="mt-3 text-xs text-gray-400">
                       {scanProfile === 'quick' && '⚡ 15-20 queries, ~5 minutes'}
                       {scanProfile === 'standard' && '🎯 40-50 queries, ~10 minutes'}
                       {scanProfile === 'deep' && '🔍 80+ queries, ~20 minutes'}
@@ -197,13 +216,13 @@ export default function Home() {
 
                   {/* Validation Result */}
                   {validationResult && validationResult.valid && (
-                    <div className="flex items-start space-x-3 p-4 bg-green-50 border border-green-200 rounded-lg">
-                      <CheckCircle className="w-5 h-5 text-green-600 mt-0.5" />
+                    <div className="flex items-start space-x-3 p-4 bg-gradient-to-br from-green-500/10 to-emerald-500/10 border border-green-500/30 rounded-xl backdrop-blur-xl">
+                      <CheckCircle className="w-5 h-5 text-green-400 mt-0.5" />
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-green-800">
+                        <p className="text-sm font-medium text-green-300">
                           Target Validated
                         </p>
-                        <p className="text-sm text-green-700">
+                        <p className="text-sm text-green-400">
                           {validationResult.normalized_target}
                         </p>
                       </div>
@@ -212,11 +231,11 @@ export default function Home() {
 
                   {/* Error Message */}
                   {error && (
-                    <div className="flex items-start space-x-3 p-4 bg-red-50 border border-red-200 rounded-lg">
-                      <AlertTriangle className="w-5 h-5 text-red-600 mt-0.5" />
+                    <div className="flex items-start space-x-3 p-4 bg-gradient-to-br from-red-500/10 to-orange-500/10 border border-red-500/30 rounded-xl backdrop-blur-xl">
+                      <AlertTriangle className="w-5 h-5 text-red-400 mt-0.5" />
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-red-800">Error</p>
-                        <p className="text-sm text-red-700">{error}</p>
+                        <p className="text-sm font-medium text-red-300">Error</p>
+                        <p className="text-sm text-red-400">{error}</p>
                       </div>
                     </div>
                   )}
@@ -225,7 +244,7 @@ export default function Home() {
                   <button
                     onClick={handleValidate}
                     disabled={isValidating || !targetDomain.trim()}
-                    className="w-full bg-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-purple-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center justify-center space-x-2"
+                    className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-purple-500 hover:to-pink-500 disabled:from-gray-500 disabled:to-gray-600 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-purple-500/50"
                   >
                     <Search className="w-5 h-5" />
                     <span>{isValidating ? 'Validating...' : 'Validate Target'}</span>
@@ -235,16 +254,16 @@ export default function Home() {
             ) : (
               // Step 2: Legal Disclaimer
               <>
-                <h2 className="text-2xl font-bold text-gray-800 mb-6">
+                <h2 className="text-3xl font-bold text-white mb-8">
                   Legal Disclaimer & Authorization
                 </h2>
 
                 <div className="space-y-6">
-                  <div className="bg-yellow-50 border-2 border-yellow-400 rounded-lg p-6">
-                    <h3 className="font-bold text-yellow-900 mb-4">
+                  <div className="bg-gradient-to-br from-yellow-500/10 to-orange-500/10 border-2 border-yellow-500/30 rounded-xl p-6 backdrop-blur-xl">
+                    <h3 className="font-bold text-yellow-300 mb-4">
                       ⚖️ IMPORTANT LEGAL NOTICE
                     </h3>
-                    <div className="space-y-3 text-sm text-yellow-900">
+                    <div className="space-y-3 text-sm text-yellow-200/90">
                       <p>
                         By proceeding, you acknowledge and agree that:
                       </p>
@@ -260,26 +279,26 @@ export default function Home() {
                   </div>
 
                   {/* Consent Checkbox */}
-                  <div className="flex items-start space-x-3">
+                  <div className="flex items-start space-x-3 p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-xl">
                     <input
                       type="checkbox"
                       id="consent"
                       checked={consentAccepted}
                       onChange={(e) => setConsentAccepted(e.target.checked)}
-                      className="mt-1 w-5 h-5 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                      className="mt-1 w-5 h-5 text-purple-400 border-white/20 rounded focus:ring-purple-500"
                     />
-                    <label htmlFor="consent" className="text-sm text-gray-700">
+                    <label htmlFor="consent" className="text-sm text-gray-300">
                       I have read and understand the legal disclaimer. I confirm that I have proper authorization to scan{' '}
-                      <strong>{validationResult.normalized_target}</strong> and will use the results responsibly and ethically.
+                      <strong className="text-white">{validationResult.normalized_target}</strong> and will use the results responsibly and ethically.
                     </label>
                   </div>
 
                   {/* Error Message */}
                   {error && (
-                    <div className="flex items-start space-x-3 p-4 bg-red-50 border border-red-200 rounded-lg">
-                      <AlertTriangle className="w-5 h-5 text-red-600 mt-0.5" />
+                    <div className="flex items-start space-x-3 p-4 bg-gradient-to-br from-red-500/10 to-orange-500/10 border border-red-500/30 rounded-xl backdrop-blur-xl">
+                      <AlertTriangle className="w-5 h-5 text-red-400 mt-0.5" />
                       <div className="flex-1">
-                        <p className="text-sm text-red-700">{error}</p>
+                        <p className="text-sm text-red-400">{error}</p>
                       </div>
                     </div>
                   )}
@@ -291,14 +310,14 @@ export default function Home() {
                         setShowDisclaimer(false);
                         setConsentAccepted(false);
                       }}
-                      className="flex-1 bg-gray-200 text-gray-700 py-3 px-6 rounded-lg font-semibold hover:bg-gray-300 transition-colors"
+                      className="flex-1 bg-gradient-to-r from-gray-700/50 to-slate-700/50 text-white py-3 px-6 rounded-xl font-semibold hover:from-gray-600/50 hover:to-slate-600/50 transition-all border border-white/10 backdrop-blur-xl"
                     >
                       Cancel
                     </button>
                     <button
                       onClick={handleStartScan}
                       disabled={!consentAccepted || isCreatingScan}
-                      className="flex-1 bg-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-purple-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                      className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-purple-500 hover:to-pink-500 disabled:from-gray-500 disabled:to-gray-600 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-purple-500/50"
                     >
                       {isCreatingScan ? 'Initiating Scan...' : 'Start Scan'}
                     </button>
@@ -310,33 +329,42 @@ export default function Home() {
         </div>
 
         {/* Feature Cards */}
-        <div className="grid md:grid-cols-3 gap-6 mt-12 max-w-4xl mx-auto">
-          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 text-white">
-            <div className="flex items-center justify-center w-12 h-12 bg-purple-500/20 rounded-lg mb-4">
-              <Zap className="w-6 h-6 text-purple-400" />
+        <div className="grid md:grid-cols-3 gap-8 mt-16 max-w-4xl mx-auto">
+          <div className="relative p-6 rounded-2xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 backdrop-blur-xl border border-white/10 hover:border-purple-400/50 transition-all duration-300 group hover:from-purple-500/20 hover:to-pink-500/20 hover:shadow-lg hover:shadow-purple-500/20">
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-600/0 to-pink-600/0 group-hover:from-purple-600/5 group-hover:to-pink-600/5 transition-all duration-300 rounded-2xl"></div>
+            <div className="relative z-10">
+              <div className="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-purple-500/30 to-pink-500/30 rounded-xl mb-4 group-hover:from-purple-500/50 group-hover:to-pink-500/50 transition-all">
+                <Zap className="w-7 h-7 text-purple-300" />
+              </div>
+              <h3 className="font-bold text-lg mb-3 text-white">Automated Dorking</h3>
+              <p className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
+                20+ specialized reconnaissance categories with 200+ security-focused dork queries
+              </p>
             </div>
-            <h3 className="font-bold text-lg mb-2">Automated Dorking</h3>
-            <p className="text-sm text-gray-300">
-              20+ specialized reconnaissance categories with 200+ security-focused dork queries
-            </p>
           </div>
-          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 text-white">
-            <div className="flex items-center justify-center w-12 h-12 bg-purple-500/20 rounded-lg mb-4">
-              <Target className="w-6 h-6 text-purple-400" />
+          <div className="relative p-6 rounded-2xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 backdrop-blur-xl border border-white/10 hover:border-purple-400/50 transition-all duration-300 group hover:from-purple-500/20 hover:to-pink-500/20 hover:shadow-lg hover:shadow-purple-500/20">
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-600/0 to-pink-600/0 group-hover:from-purple-600/5 group-hover:to-pink-600/5 transition-all duration-300 rounded-2xl"></div>
+            <div className="relative z-10">
+              <div className="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-purple-500/30 to-pink-500/30 rounded-xl mb-4 group-hover:from-purple-500/50 group-hover:to-pink-500/50 transition-all">
+                <Target className="w-7 h-7 text-purple-300" />
+              </div>
+              <h3 className="font-bold text-lg mb-3 text-white">Risk Classification</h3>
+              <p className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
+                Automatic severity assessment (CRITICAL/HIGH/MEDIUM) with detailed risk analysis
+              </p>
             </div>
-            <h3 className="font-bold text-lg mb-2">Risk Classification</h3>
-            <p className="text-sm text-gray-300">
-              Automatic severity assessment (CRITICAL/HIGH/MEDIUM) with detailed risk analysis
-            </p>
           </div>
-          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 text-white">
-            <div className="flex items-center justify-center w-12 h-12 bg-purple-500/20 rounded-lg mb-4">
-              <Database className="w-6 h-6 text-purple-400" />
+          <div className="relative p-6 rounded-2xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 backdrop-blur-xl border border-white/10 hover:border-purple-400/50 transition-all duration-300 group hover:from-purple-500/20 hover:to-pink-500/20 hover:shadow-lg hover:shadow-purple-500/20">
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-600/0 to-pink-600/0 group-hover:from-purple-600/5 group-hover:to-pink-600/5 transition-all duration-300 rounded-2xl"></div>
+            <div className="relative z-10">
+              <div className="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-purple-500/30 to-pink-500/30 rounded-xl mb-4 group-hover:from-purple-500/50 group-hover:to-pink-500/50 transition-all">
+                <Database className="w-7 h-7 text-purple-300" />
+              </div>
+              <h3 className="font-bold text-lg mb-3 text-white">Comprehensive Reports</h3>
+              <p className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
+                Professional pentesting-grade reports with detailed findings and remediation guidance
+              </p>
             </div>
-            <h3 className="font-bold text-lg mb-2">Comprehensive Reports</h3>
-            <p className="text-sm text-gray-300">
-              Professional pentesting-grade reports with detailed findings and remediation guidance
-            </p>
           </div>
         </div>
       </div>

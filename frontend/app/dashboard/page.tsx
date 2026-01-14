@@ -89,12 +89,12 @@ export default function DashboardPage() {
 
   const getStatusBadge = (status: string) => {
     const styles = {
-      completed: 'bg-green-100 text-green-800 border-green-300',
-      running: 'bg-blue-100 text-blue-800 border-blue-300',
-      failed: 'bg-red-100 text-red-800 border-red-300',
-      pending: 'bg-yellow-100 text-yellow-800 border-yellow-300'
+      completed: 'bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-300 border-green-500/30',
+      running: 'bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-300 border-blue-500/30',
+      failed: 'bg-gradient-to-r from-red-500/20 to-orange-500/20 text-red-300 border-red-500/30',
+      pending: 'bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-300 border-yellow-500/30'
     };
-    return styles[status as keyof typeof styles] || 'bg-gray-100 text-gray-800';
+    return styles[status as keyof typeof styles] || 'bg-gray-500/20 text-gray-300';
   };
 
   const getStatusIcon = (status: string) => {
@@ -119,10 +119,11 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 flex items-center justify-center">
+        <Navbar />
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-          <p className="mt-4 text-gray-600">Loading dashboard...</p>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500"></div>
+          <p className="mt-4 text-gray-400">Loading dashboard...</p>
         </div>
       </div>
     );
@@ -150,65 +151,71 @@ export default function DashboardPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-gray-50 py-8">
-        <div className="max-w-7xl mx-auto px-4">
+      <main className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 py-12">
+        {/* Animated background elements */}
+        <div className="fixed inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-0 left-0 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl -translate-y-1/2 -translate-x-1/2"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-pink-600/20 rounded-full blur-3xl translate-y-1/2 translate-x-1/2"></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
           {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Scan Dashboard</h1>
-            <p className="text-gray-600">Overview of all reconnaissance scans and findings</p>
+          <div className="mb-12">
+            <h1 className="text-4xl font-bold text-white mb-2">Scan Dashboard</h1>
+            <p className="text-gray-400">Overview of all reconnaissance scans and findings</p>
           </div>
 
           {/* Summary Stats */}
           {analytics && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-              <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+              <div className="rounded-2xl bg-gradient-to-br from-blue-500/10 to-cyan-500/10 backdrop-blur-xl border border-white/10 hover:border-blue-400/50 p-6 transition-all duration-300 group hover:from-blue-500/20 hover:to-cyan-500/20">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600 font-medium">Total Scans</p>
-                    <p className="text-3xl font-bold text-gray-900">{analytics.summary.total_scans}</p>
+                    <p className="text-sm text-gray-400 font-medium">Total Scans</p>
+                    <p className="text-3xl font-bold text-white mt-2">{analytics.summary.total_scans}</p>
                   </div>
-                  <Search className="w-10 h-10 text-blue-500 opacity-50" />
+                  <Search className="w-12 h-12 text-blue-400 opacity-40 group-hover:opacity-60 transition-opacity" />
                 </div>
-                <p className="text-xs text-gray-500 mt-2">
+                <p className="text-xs text-gray-400 mt-3">
                   {analytics.summary.completed_scans} completed, {analytics.summary.running_scans} running
                 </p>
               </div>
 
-              <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+              <div className="rounded-2xl bg-gradient-to-br from-green-500/10 to-emerald-500/10 backdrop-blur-xl border border-white/10 hover:border-green-400/50 p-6 transition-all duration-300 group hover:from-green-500/20 hover:to-emerald-500/20">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600 font-medium">Total Findings</p>
-                    <p className="text-3xl font-bold text-gray-900">{analytics.summary.total_findings}</p>
+                    <p className="text-sm text-gray-400 font-medium">Total Findings</p>
+                    <p className="text-3xl font-bold text-white mt-2">{analytics.summary.total_findings}</p>
                   </div>
-                  <Shield className="w-10 h-10 text-purple-500 opacity-50" />
+                  <Shield className="w-12 h-12 text-green-400 opacity-40 group-hover:opacity-60 transition-opacity" />
                 </div>
-                <p className="text-xs text-gray-500 mt-2">
+                <p className="text-xs text-gray-400 mt-3">
                   Avg: {analytics.summary.average_findings_per_scan} per scan
                 </p>
               </div>
 
-              <div className="bg-white border border-red-200 rounded-lg p-6 shadow-sm bg-red-50">
+              <div className="rounded-2xl bg-gradient-to-br from-red-500/10 to-orange-500/10 backdrop-blur-xl border border-white/10 hover:border-red-400/50 p-6 transition-all duration-300 group hover:from-red-500/20 hover:to-orange-500/20">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-red-600 font-medium">Critical Findings</p>
-                    <p className="text-3xl font-bold text-red-700">{analytics.risk_distribution.critical}</p>
+                    <p className="text-sm text-gray-400 font-medium">Critical Findings</p>
+                    <p className="text-3xl font-bold text-red-300 mt-2">{analytics.risk_distribution.critical}</p>
                   </div>
-                  <AlertCircle className="w-10 h-10 text-red-500 opacity-50" />
+                  <AlertCircle className="w-12 h-12 text-red-400 opacity-40 group-hover:opacity-60 transition-opacity" />
                 </div>
-                <p className="text-xs text-red-600 mt-2">
+                <p className="text-xs text-gray-400 mt-3">
                   {analytics.risk_distribution.high} high risk
                 </p>
               </div>
 
-              <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+              <div className="rounded-2xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 backdrop-blur-xl border border-white/10 hover:border-purple-400/50 p-6 transition-all duration-300 group hover:from-purple-500/20 hover:to-pink-500/20">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600 font-medium">Avg Query Time</p>
-                    <p className="text-3xl font-bold text-gray-900">~2s</p>
+                    <p className="text-sm text-gray-400 font-medium">Avg Query Time</p>
+                    <p className="text-3xl font-bold text-white mt-2">~2s</p>
                   </div>
-                  <TrendingUp className="w-10 h-10 text-green-500 opacity-50" />
+                  <TrendingUp className="w-12 h-12 text-purple-400 opacity-40 group-hover:opacity-60 transition-opacity" />
                 </div>
-                <p className="text-xs text-gray-500 mt-2">
+                <p className="text-xs text-gray-400 mt-3">
                   Per dork query execution
                 </p>
               </div>
@@ -217,10 +224,10 @@ export default function DashboardPage() {
 
           {/* Charts Row */}
           {analytics && (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
               {/* Risk Distribution Pie Chart */}
-              <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Risk Distribution</h3>
+              <div className="rounded-2xl bg-gradient-to-br from-slate-800/50 to-purple-800/50 backdrop-blur-2xl border border-white/20 p-8 hover:border-white/30 transition-all">
+                <h3 className="text-xl font-semibold text-white mb-6">Risk Distribution</h3>
                 {riskChartData.length > 0 ? (
                   <ResponsiveContainer width="100%" height={250}>
                     <PieChart>
@@ -247,109 +254,109 @@ export default function DashboardPage() {
               </div>
 
               {/* Category Distribution Bar Chart */}
-              <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Top Categories</h3>
+              <div className="rounded-2xl bg-gradient-to-br from-slate-800/50 to-purple-800/50 backdrop-blur-2xl border border-white/20 p-8 hover:border-white/30 transition-all">
+                <h3 className="text-xl font-semibold text-white mb-6">Top Categories</h3>
                 {categoryChartData.length > 0 ? (
                   <ResponsiveContainer width="100%" height={250}>
                     <BarChart data={categoryChartData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} fontSize={11} />
-                      <YAxis />
-                      <Tooltip />
-                      <Bar dataKey="value" fill="#3B82F6" />
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                      <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} fontSize={11} tick={{ fill: '#9CA3AF' }} />
+                      <YAxis tick={{ fill: '#9CA3AF' }} />
+                      <Tooltip contentStyle={{ backgroundColor: '#1f2937', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', color: '#fff' }} />
+                      <Bar dataKey="value" fill="#A78BFA" />
                     </BarChart>
                   </ResponsiveContainer>
                 ) : (
-                  <p className="text-center text-gray-500 py-20">No category data available</p>
+                  <p className="text-center text-gray-400 py-20">No category data available</p>
                 )}
               </div>
 
               {/* Scan Timeline */}
-              <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Scan Timeline (Last 30 Days)</h3>
+              <div className="rounded-2xl bg-gradient-to-br from-slate-800/50 to-purple-800/50 backdrop-blur-2xl border border-white/20 p-8 hover:border-white/30 transition-all">
+                <h3 className="text-xl font-semibold text-white mb-6">Scan Timeline (Last 30 Days)</h3>
                 {analytics.scan_timeline.length > 0 ? (
                   <ResponsiveContainer width="100%" height={250}>
                     <LineChart data={analytics.scan_timeline}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="date" fontSize={11} />
-                      <YAxis />
-                      <Tooltip />
-                      <Legend />
-                      <Line type="monotone" dataKey="count" stroke="#8B5CF6" name="Scans" />
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                      <XAxis dataKey="date" fontSize={11} tick={{ fill: '#9CA3AF' }} />
+                      <YAxis tick={{ fill: '#9CA3AF' }} />
+                      <Tooltip contentStyle={{ backgroundColor: '#1f2937', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', color: '#fff' }} />
+                      <Legend wrapperStyle={{ color: '#9CA3AF' }} />
+                      <Line type="monotone" dataKey="count" stroke="#A78BFA" name="Scans" />
                     </LineChart>
                   </ResponsiveContainer>
                 ) : (
-                  <p className="text-center text-gray-500 py-20">No timeline data available</p>
+                  <p className="text-center text-gray-400 py-20">No timeline data available</p>
                 )}
               </div>
 
               {/* Profile Distribution */}
-              <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Scan Profiles Used</h3>
+              <div className="rounded-2xl bg-gradient-to-br from-slate-800/50 to-purple-800/50 backdrop-blur-2xl border border-white/20 p-8 hover:border-white/30 transition-all">
+                <h3 className="text-xl font-semibold text-white mb-6">Scan Profiles Used</h3>
                 {profileChartData.length > 0 ? (
                   <ResponsiveContainer width="100%" height={250}>
                     <BarChart data={profileChartData} layout="vertical">
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis type="number" />
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                      <XAxis type="number" tick={{ fill: '#9CA3AF' }} />
                       <YAxis dataKey="name" type="category" width={80} />
                       <Tooltip />
                       <Bar dataKey="value" fill="#10B981" />
                     </BarChart>
                   </ResponsiveContainer>
                 ) : (
-                  <p className="text-center text-gray-500 py-20">No profile data available</p>
+                  <p className="text-center text-gray-400 py-20">No profile data available</p>
                 )}
               </div>
             </div>
           )}
 
           {/* Filters */}
-          <div className="bg-white border border-gray-200 rounded-lg p-4 mb-6 shadow-sm">
+          <div className="rounded-2xl bg-gradient-to-br from-slate-800/50 to-purple-800/50 backdrop-blur-2xl border border-white/20 p-6 mb-8 hover:border-white/30 transition-all">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Domain</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Domain</label>
                 <input
                   type="text"
                   placeholder="Filter by domain..."
                   value={filter.domain}
                   onChange={(e) => setFilter({ ...filter, domain: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-white/20 rounded-lg bg-white/5 text-white placeholder-gray-500 focus:ring-2 focus:ring-purple-400 focus:border-transparent backdrop-blur-xl transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Status</label>
                 <select
                   value={filter.status}
                   onChange={(e) => setFilter({ ...filter, status: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-white/20 rounded-lg bg-white/5 text-white focus:ring-2 focus:ring-purple-400 focus:border-transparent backdrop-blur-xl transition-all"
                 >
-                  <option value="all">All Statuses</option>
-                  <option value="completed">Completed</option>
-                  <option value="running">Running</option>
-                  <option value="failed">Failed</option>
-                  <option value="pending">Pending</option>
+                  <option value="all" style={{ backgroundColor: '#1f2937' }}>All Statuses</option>
+                  <option value="completed" style={{ backgroundColor: '#1f2937' }}>Completed</option>
+                  <option value="running" style={{ backgroundColor: '#1f2937' }}>Running</option>
+                  <option value="failed" style={{ backgroundColor: '#1f2937' }}>Failed</option>
+                  <option value="pending" style={{ backgroundColor: '#1f2937' }}>Pending</option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Profile</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Profile</label>
                 <select
                   value={filter.profile}
                   onChange={(e) => setFilter({ ...filter, profile: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-white/20 rounded-lg bg-white/5 text-white focus:ring-2 focus:ring-purple-400 focus:border-transparent backdrop-blur-xl transition-all"
                 >
-                  <option value="all">All Profiles</option>
-                  <option value="quick">Quick</option>
-                  <option value="standard">Standard</option>
-                  <option value="deep">Deep</option>
+                  <option value="all" style={{ backgroundColor: '#1f2937' }}>All Profiles</option>
+                  <option value="quick" style={{ backgroundColor: '#1f2937' }}>Quick</option>
+                  <option value="standard" style={{ backgroundColor: '#1f2937' }}>Standard</option>
+                  <option value="deep" style={{ backgroundColor: '#1f2937' }}>Deep</option>
                 </select>
               </div>
 
               <div className="flex items-end">
                 <button
                   onClick={() => setFilter({ status: 'all', profile: 'all', domain: '' })}
-                  className="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors"
+                  className="w-full px-4 py-2 bg-gradient-to-r from-gray-700/50 to-slate-700/50 text-white rounded-lg hover:from-gray-600/50 hover:to-slate-600/50 transition-all border border-white/10"
                 >
                   Reset Filters
                 </button>
@@ -358,37 +365,37 @@ export default function DashboardPage() {
           </div>
 
           {/* Scans List */}
-          <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h2 className="text-xl font-semibold text-gray-900">
+          <div className="rounded-2xl bg-gradient-to-br from-slate-800/50 to-purple-800/50 backdrop-blur-2xl border border-white/20 shadow-2xl overflow-hidden hover:border-white/30 transition-all">
+            <div className="px-8 py-6 border-b border-white/10">
+              <h2 className="text-2xl font-semibold text-white">
                 Recent Scans ({filteredScans.length})
               </h2>
             </div>
 
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50">
+                <thead className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-b border-white/10">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Domain</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Profile</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Queries</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Findings</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Domain</th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Profile</th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Status</th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Date</th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Queries</th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Findings</th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="divide-y divide-white/10">
                   {filteredScans.map((scan) => (
-                    <tr key={scan.id} className="hover:bg-gray-50 transition-colors">
+                    <tr key={scan.id} className="hover:bg-white/5 transition-colors">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
-                          <Shield className="w-4 h-4 text-gray-400 mr-2" />
-                          <span className="text-sm font-medium text-gray-900">{scan.target_domain}</span>
+                          <Shield className="w-4 h-4 text-purple-400 mr-2" />
+                          <span className="text-sm font-medium text-white">{scan.target_domain}</span>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="text-sm text-gray-600 uppercase font-semibold">{scan.scan_profile}</span>
+                        <span className="text-sm text-gray-300 uppercase font-semibold">{scan.scan_profile}</span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold border ${getStatusBadge(scan.status)}`}>
@@ -396,15 +403,15 @@ export default function DashboardPage() {
                           {scan.status}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
                         {new Date(scan.started_at).toLocaleDateString()}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
                         {scan.total_queries}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                          scan.total_findings > 0 ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-600'
+                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${
+                          scan.total_findings > 0 ? 'bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-300 border-blue-500/30' : 'bg-gray-500/20 text-gray-300 border-gray-500/30'
                         }`}>
                           {scan.total_findings}
                         </span>
@@ -412,7 +419,7 @@ export default function DashboardPage() {
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
                         <Link
                           href={`/scans/${scan.id}`}
-                          className="text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1"
+                          className="text-purple-400 hover:text-purple-300 font-medium flex items-center gap-1 transition-colors"
                         >
                           <FileText className="w-4 h-4" />
                           View Details
@@ -424,9 +431,9 @@ export default function DashboardPage() {
               </table>
 
               {filteredScans.length === 0 && (
-                <div className="text-center py-12">
-                  <Search className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                  <p className="text-gray-500">No scans found matching your filters</p>
+                <div className="text-center py-16">
+                  <Search className="w-12 h-12 text-gray-500 mx-auto mb-4" />
+                  <p className="text-gray-400">No scans found matching your filters</p>
                 </div>
               )}
             </div>
