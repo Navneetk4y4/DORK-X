@@ -55,17 +55,21 @@ async def create_scan(
     
     logger.info(f"✅ Scan created with ID: {scan.id}")
     
-    # Schedule scan execution in background
-    background_tasks.add_task(execute_scan_background, scan.id, db)
+    # Schedule scan execution in background (without passing db session)
+    background_tasks.add_task(execute_scan_background, scan.id)
     
     return scan
 
 
-async def execute_scan_background(scan_id: UUID, db: Session):
+async def execute_scan_background(scan_id: UUID):
     """
-    Execute scan in background
-    This is a placeholder - full implementation will be in scan_executor service
+    Execute scan in background with its own database session
+    Runs asynchronously after the HTTP response is sent
     """
+    # Create a new database session for this background task
+    from app.core.database import SessionLocal
+    db = SessionLocal()
+    
     try:
         logger.info(f"🔍 Starting background scan execution: {scan_id}")
         
@@ -109,9 +113,14 @@ async def execute_scan_background(scan_id: UUID, db: Session):
         
     except Exception as e:
         logger.error(f"❌ Scan execution failed: {str(e)}")
-        scan.status = "failed"
-        scan.error_message = str(e)
-        db.commit()
+        scan = db.query(Scan).filter(Scan.id == scan_id).first()
+        if scan:
+            scan.status = "failed"
+            scan.error_message = str(e)
+            db.commit()
+    finally:
+        # Always close the database session
+        db.close()
 
 
 @router.get("/scans/{scan_id}", response_model=ScanResponse)
