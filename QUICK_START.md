@@ -1,103 +1,170 @@
 # DORK-X - Quick Start Guide
 
-## 🚀 Project is RUNNING
+## 🚀 Running Locally
 
-```
-✅ Backend:   http://localhost:8000
-✅ Frontend:  http://localhost:3000
-✅ Database:  PostgreSQL (port 5432)
-✅ Cache:     Redis (port 6379)
-```
+### Access Points
 
----
-
-## Access Points
-
-**Frontend (User Interface)**
+**Frontend (Dashboard)**
 ```
 http://localhost:3000
 ```
 
-**API Documentation (Interactive)**
-```
-http://localhost:8000/api/docs
-```
-
-**API Root (Status Check)**
+**Backend API**
 ```
 http://localhost:8000
 ```
-Returns:
-```json
-{
-  "name": "DORK-X API",
-  "version": "1.0.0",
-  "status": "operational",
-  "description": "Automated OSINT Reconnaissance Platform",
-  "docs": "/api/docs",
-  "warning": "⚠️ FOR AUTHORIZED SECURITY TESTING ONLY ⚠️"
-}
+
+**API Documentation (Swagger UI)**
+```
+http://localhost:8000/docs
+```
+
+**Health Check**
+```
+http://localhost:8000/api/v1/health
 ```
 
 ---
 
-## Useful Commands
+## Terminal Commands
 
-### View Logs
+### Start Backend
 ```bash
-# All services
-docker-compose logs -f
-
-# Specific service
-docker-compose logs -f backend
-docker-compose logs -f frontend
+source .venv/bin/activate
+cd backend
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-### Stop Services
+### Start Frontend
 ```bash
-docker-compose down
+cd frontend
+npm run dev
 ```
 
-### Restart Services
+### Check Health
 ```bash
-docker-compose restart
+curl http://localhost:8000/api/v1/health
 ```
 
-### Full Rebuild
-```bash
-docker-compose down
-docker-compose up --build
-```
-
-### Execute Commands in Container
-```bash
-# Backend
-docker-compose exec backend bash
-python -c "import app; print('Backend OK')"
-
-# Frontend  
-docker-compose exec frontend bash
-npm list
-```
-
-### View All Containers
-```bash
-docker-compose ps
-docker ps -a
+Expected response:
+```json
+{
+  "status": "operational",
+  "database": "healthy",
+  "redis": "disconnected",
+  "api_keys_configured": {
+    "google": true,
+    "bing": false
+  }
+}
 ```
 
 ---
 
 ## What's Included
 
+## What's Included
+
 ### Backend (FastAPI)
-- 11 API endpoints
-- SQLAlchemy ORM with 5 models
-- PostgreSQL integration
-- Redis caching
-- Pydantic validation
+- 15+ API endpoints
+- SQLAlchemy ORM with SQLite
+- Google Custom Search integration
+- Real-time Google Dorking
+- OWASP risk classification
+- Request logging & validation
 - CORS enabled
-- Request logging
+
+### Frontend (Next.js 16)
+- Server-side rendering
+- Real-time scan monitoring
+- Interactive dashboard
+- Risk-based filtering
+- PDF report generation
+- Responsive design
+
+### Key Features
+- ✅ Google Custom Search API integration
+- ✅ SQLite database (no setup needed)
+- ✅ 10+ dork categories
+- ✅ CRITICAL → INFO risk levels
+- ✅ OWASP Top 10 mapping
+- ✅ Real-time progress tracking
+
+---
+
+## Running Your First Scan
+
+1. **Start both services** (backend + frontend)
+2. **Navigate to** http://localhost:3000
+3. **Enter target domain** (e.g., `example.com`)
+4. **Accept disclaimer** (for authorized testing only)
+5. **Select scan profile:**
+   - Quick: ~10 queries (fast)
+   - Standard: ~44 queries (recommended)
+   - Deep: ~100+ queries (thorough)
+6. **Click "Start Scan"**
+7. **View real-time results** as Google returns findings
+
+---
+
+## Understanding Results
+
+### Risk Levels
+- **CRITICAL**: Credentials, API keys, database exposure
+- **HIGH**: Backup files, source code, database dumps
+- **MEDIUM**: Admin panels, login pages, configs
+- **LOW**: Cloud storage, error messages, Git exposure
+- **INFO**: General indexed content
+
+### Finding Categories
+- `credentials` - Leaked passwords/secrets
+- `backup_files` - Exposed backups (.sql, .bak)
+- `admin_panels` - Administrative interfaces
+- `database_dumps` - Database files
+- `source_code` - Exposed code
+- `cloud_storage` - S3/Azure/GCS links
+- `error_messages` - Stack traces/errors
+- `git_exposure` - .git directory exposure
+
+---
+
+## API Quota Management
+
+**Google Custom Search Free Tier:**
+- 100 queries per day
+- Resets at midnight Pacific Time
+
+**Scan Profiles vs Quota:**
+- Quick scan: ~10 queries (10% of daily quota)
+- Standard scan: ~44 queries (44% of daily quota)
+- Deep scan: ~100 queries (full daily quota)
+
+**Tip:** Use Quick scans for testing, Standard for real assessments.
+
+---
+
+## Troubleshooting
+
+### "0 findings" after scan
+- Verify Google API keys in `backend/.env`
+- Check CSE is set to "Search entire web"
+- Try a well-known domain first (e.g., `github.com`)
+- View backend logs for API errors
+
+### Backend errors
+- Check Python venv is activated
+- Verify all dependencies installed: `pip list`
+- Look for import errors in terminal
+
+### Frontend errors  
+- Clear Next.js cache: `rm -rf .next`
+- Reinstall deps: `rm -rf node_modules && npm install`
+- Check browser console for errors
+
+### API quota exceeded
+- Google shows 429 errors in backend logs
+- Wait until midnight PT for quota reset
+- Or upgrade to paid tier
 - Swagger docs
 
 ### Frontend (Next.js)

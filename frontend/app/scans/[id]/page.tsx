@@ -48,16 +48,32 @@ export default function ScanPage({ params }: { params: Promise<{ id: string }> }
 
   const loadScanData = async () => {
     try {
+      // Load all data in parallel, but handle individual failures
       const [scanData, findingsData, statsData] = await Promise.all([
-        getScan(id),
-        getScanFindings(id),
-        getScanStatistics(id)
+        getScan(id).catch(err => {
+          console.warn('Failed to load scan details:', err.message);
+          return null;
+        }),
+        getScanFindings(id).catch(err => {
+          console.warn('Failed to load findings:', err.message);
+          return { findings: [] };
+        }),
+        getScanStatistics(id).catch(err => {
+          console.warn('Failed to load statistics:', err.message);
+          return null;
+        })
       ]);
 
-      setScan(scanData);
-      setFindings(findingsData.findings || []);
-      setStatistics(statsData);
-      setError(null);
+      if (scanData) setScan(scanData);
+      if (findingsData) setFindings(findingsData.findings || []);
+      if (statsData) setStatistics(statsData);
+      
+      // Only set error if all requests failed
+      if (!scanData && !findingsData && !statsData) {
+        setError('Failed to load scan data');
+      } else {
+        setError(null);
+      }
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to load scan data');
     } finally {
@@ -79,7 +95,7 @@ export default function ScanPage({ params }: { params: Promise<{ id: string }> }
 
   const filteredFindings = selectedRiskFilter === 'all'
     ? findings
-    : findings.filter(f => f.risk_level === selectedRiskFilter);
+    : findings.filter((f: Finding) => f.risk_level === selectedRiskFilter);
 
   if (isLoading) {
     return (

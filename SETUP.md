@@ -4,46 +4,62 @@
 
 ### Step 1: Environment Setup
 
-The `.env` files have been created from templates. You need to configure them:
+#### Backend Configuration (`backend/.env`)
 
-#### Backend Configuration (`/backend/.env`)
-
-**CRITICAL:** Update these values:
+**Required Configuration:**
 
 ```bash
-# Security (MUST CHANGE)
-SECRET_KEY=your-super-secret-key-change-this-now
-JWT_SECRET=your-jwt-secret-key-change-this-now
+# Database - SQLite (automatic, no setup needed)
+DATABASE_URL=sqlite:///./dorkx.db
 
-# Database
-DATABASE_URL=postgresql://dorkx_user:dorkx_password@localhost:5432/dorkx_db
+# Security Keys (can use defaults for development)
+SECRET_KEY=dev-secret-key
+JWT_SECRET=dev-jwt-secret
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
 
-# Redis
-REDIS_URL=redis://localhost:6379
-
-# Search Engine API Keys (Required for functionality)
+# Search Engine API Keys (REQUIRED for real Google Dorking)
 GOOGLE_API_KEY=your-google-api-key-here
 GOOGLE_CSE_ID=your-custom-search-engine-id-here
-BING_API_KEY=your-bing-api-key-here
+
+# Optional: Bing Search API
+BING_API_KEY=dev-placeholder
+
+# Rate Limiting
+MAX_QUERIES_PER_DAY=100
+MAX_QUERIES_PER_SESSION=20
+QUERY_DELAY_SECONDS=3
+
+# Application Settings
+ENVIRONMENT=development
+DEBUG=True
+LOG_LEVEL=INFO
+
+# CORS Settings
+ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
+
+# Report Storage
+REPORT_STORAGE_PATH=/path/to/DORK-X/reports
 ```
 
 **Getting API Keys:**
 
-1. **Google Custom Search API:**
+1. **Google Custom Search API (Required):**
    - Visit: https://developers.google.com/custom-search/v1/overview
    - Create a project in Google Cloud Console
    - Enable Custom Search API
    - Create credentials (API Key)
-   - Create a Custom Search Engine at: https://cse.google.com/
-   - Copy your CSE ID
+   - Go to: https://cse.google.com/cse/
+   - Create a new search engine
+   - **Important:** Select "Search the entire web" (not specific sites)
+   - Copy your Search Engine ID (CSE ID)
 
-2. **Bing Search API:**
-   - Visit: https://www.microsoft.com/en-us/bing/apis/bing-web-search-api
-   - Sign up for Azure
-   - Create a Bing Search resource
+2. **Bing Search API (Optional):**
+   - Visit Azure Portal: https://portal.azure.com
+   - Create a "Bing Search v7" resource
    - Copy your API key
 
-#### Frontend Configuration (`/frontend/.env.local`)
+#### Frontend Configuration (`frontend/.env.local`)
 
 ```bash
 NEXT_PUBLIC_API_URL=http://localhost:8000
@@ -53,36 +69,21 @@ NEXT_PUBLIC_API_URL=http://localhost:8000
 
 ### Step 2: Install Dependencies
 
-#### Option A: Using Docker (Recommended)
-
-```bash
-# Start all services
-docker-compose up -d
-
-# View logs
-docker-compose logs -f
-
-# Stop services
-docker-compose down
-```
-
-#### Option B: Manual Installation
-
 **Backend:**
 ```bash
-cd backend
+cd /path/to/DORK-X
 
-# Create virtual environment
-python3 -m venv venv
+# Create virtual environment (Python 3.11 recommended)
+python3.11 -m venv .venv
 
 # Activate virtual environment
 # On macOS/Linux:
-source venv/bin/activate
+source .venv/bin/activate
 # On Windows:
-# venv\Scripts\activate
+# .venv\Scripts\activate
 
 # Install dependencies
-pip install -r requirements.txt
+pip install -r backend/requirements.txt
 ```
 
 **Frontend:**
@@ -91,77 +92,146 @@ cd frontend
 
 # Install dependencies
 npm install
+
+# Install dev dependencies (if needed)
+npm install -D @types/node
 ```
 
-**Database (PostgreSQL):**
-```bash
-# Install PostgreSQL (macOS)
-brew install postgresql@15
-brew services start postgresql@15
-
-# Create database
-createdb dorkx_db
-
-# Run initialization script
-psql dorkx_db < database/init.sql
-```
-
-**Redis:**
-```bash
-# Install Redis (macOS)
-brew install redis
-brew services start redis
-```
+**No Database Setup Required:**
+- SQLite is used by default (file: `backend/dorkx.db`)
+- Database tables are created automatically on first run
+- No PostgreSQL or Redis installation needed
 
 ---
 
-### Step 3: Initialize Database
+### Step 3: Run the Application
 
+**Terminal 1 - Start Backend:**
 ```bash
+# Activate venv if not already active
+source .venv/bin/activate
+
 cd backend
-
-# Create tables
-psql -U dorkx_user -d dorkx_db -f ../database/init.sql
-
-# Or using Docker:
-docker-compose exec db psql -U dorkx_user -d dorkx_db -f /docker-entrypoint-initdb.d/init.sql
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
----
-
-### Step 4: Run the Application
-
-#### Using Docker:
-```bash
-# Already running from Step 2
-# Access at:
-# - Frontend: http://localhost:3000
-# - Backend API: http://localhost:8000
-# - API Docs: http://localhost:8000/api/docs
+You should see:
+```
+✅ Database tables created/verified
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000
 ```
 
-#### Manual:
-
-**Terminal 1 - Backend:**
-```bash
-cd backend
-source venv/bin/activate
-uvicorn app.main:app --reload --port 8000
-```
-
-**Terminal 2 - Frontend:**
+**Terminal 2 - Start Frontend:**
 ```bash
 cd frontend
 npm run dev
 ```
 
+You should see:
+```
+▲ Next.js 16.1.1 (Turbopack)
+- Local:    http://localhost:3000
+✓ Ready in 2.3s
+```
+
+You should see:
+```
+▲ Next.js 16.1.1 (Turbopack)
+- Local:    http://localhost:3000
+✓ Ready in 2.3s
+```
+
 ---
 
-### Step 5: Verify Installation
+### Step 4: Verify Installation
 
 1. **Check Backend Health:**
    ```bash
    curl http://localhost:8000/api/v1/health
+   ```
+   
+   Expected response:
+   ```json
+   {
+     "status": "operational",
+     "database": "healthy",
+     "redis": "disconnected",
+     "api_keys_configured": {
+       "google": true,
+       "bing": false
+     }
+   }
+   ```
+
+2. **Access Frontend:**
+   - Open browser: http://localhost:3000
+   - You should see the DORK-X dashboard
+
+3. **Test API Documentation:**
+   - Visit: http://localhost:8000/docs
+   - Interactive Swagger UI for all endpoints
+
+---
+
+### Step 5: Run Your First Scan
+
+1. Navigate to http://localhost:3000
+2. Enter a target domain (e.g., `example.com`)
+3. Accept the legal disclaimer
+4. Choose "Quick" scan profile for testing
+5. Click "Start Scan"
+6. View real-time results as Google API returns findings
+
+**Notes:**
+- Google free tier: 100 queries/day
+- Quick scan: ~10 queries
+- Standard scan: ~44 queries
+- Deep scan: ~100+ queries
+
+---
+
+## Troubleshooting
+
+### Backend won't start
+- Ensure Python 3.11+ is installed
+- Activate venv: `source .venv/bin/activate`
+- Check logs for specific errors
+
+### Frontend won't start
+- Ensure Node.js 18+ is installed
+- Delete `node_modules` and run `npm install` again
+- Check for port conflicts on 3000
+
+### No scan results (0 findings)
+- Verify Google API keys in `backend/.env`
+- Check CSE is configured to "Search entire web"
+- View backend logs for API errors
+- Free tier has 100 queries/day limit
+
+### Redis connection warnings
+- Redis is optional (used for caching)
+- Can be safely ignored for development
+- To suppress: `brew install redis && brew services start redis`
+
+---
+
+## Optional: Redis Installation
+
+For production caching (optional):
+
+```bash
+# macOS
+brew install redis
+brew services start redis
+
+# Ubuntu/Debian
+sudo apt-get install redis-server
+sudo systemctl start redis
+
+# Docker
+docker run -d -p 6379:6379 redis:alpine
+```
    ```
 
 2. **Open Frontend:**

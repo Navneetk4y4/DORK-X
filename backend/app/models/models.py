@@ -4,13 +4,41 @@ SQLAlchemy ORM models for DORK-X
 """
 
 from sqlalchemy import Column, String, Integer, Text, Boolean, DateTime, ForeignKey, Enum, JSON
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
+from sqlalchemy.types import CHAR, TypeDecorator
 import uuid
 import enum
 
 from app.core.database import Base
+
+
+class GUID(TypeDecorator):
+    """Platform-independent GUID/UUID type.
+
+    Uses PostgreSQL's native UUID when available; falls back to CHAR(36) for SQLite.
+    """
+
+    impl = CHAR
+    cache_ok = True
+
+    def load_dialect_impl(self, dialect):
+        if dialect.name == "postgresql":
+            from sqlalchemy.dialects.postgresql import UUID  # local import to avoid hard dependency
+            return dialect.type_descriptor(UUID(as_uuid=True))
+        return dialect.type_descriptor(CHAR(36))
+
+    def process_bind_param(self, value, dialect):
+        if value is None:
+            return value
+        if isinstance(value, uuid.UUID):
+            return str(value)
+        return str(uuid.UUID(value))
+
+    def process_result_value(self, value, dialect):
+        if value is None:
+            return value
+        return uuid.UUID(value)
 
 
 class ScanStatus(str, enum.Enum):
@@ -45,7 +73,7 @@ class Scan(Base):
     """
     __tablename__ = "scans"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
     target_domain = Column(String(255), nullable=False, index=True)
     scan_profile = Column(String(50), default="standard")
     status = Column(String(20), default="pending", index=True)
@@ -73,8 +101,8 @@ class DorkQuery(Base):
     """
     __tablename__ = "dork_queries"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    scan_id = Column(UUID(as_uuid=True), ForeignKey("scans.id"), nullable=False, index=True)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    scan_id = Column(GUID(), ForeignKey("scans.id"), nullable=False, index=True)
     query_text = Column(Text, nullable=False)
     category = Column(String(100), index=True)
     priority = Column(Integer, default=0)
@@ -97,9 +125,9 @@ class Finding(Base):
     """
     __tablename__ = "findings"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    scan_id = Column(UUID(as_uuid=True), ForeignKey("scans.id"), nullable=False, index=True)
-    query_id = Column(UUID(as_uuid=True), ForeignKey("dork_queries.id"))
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    scan_id = Column(GUID(), ForeignKey("scans.id"), nullable=False, index=True)
+    query_id = Column(GUID(), ForeignKey("dork_queries.id"))
     url = Column(Text, nullable=False)
     title = Column(Text)
     snippet = Column(Text)
@@ -127,8 +155,8 @@ class AuditLog(Base):
     """
     __tablename__ = "audit_logs"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    scan_id = Column(UUID(as_uuid=True), ForeignKey("scans.id"), index=True)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    scan_id = Column(GUID(), ForeignKey("scans.id"), index=True)
     user_id = Column(String(255), index=True)
     action = Column(String(100), nullable=False)
     details = Column(JSON)
@@ -149,8 +177,8 @@ class Report(Base):
     """
     __tablename__ = "reports"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    scan_id = Column(UUID(as_uuid=True), ForeignKey("scans.id"), nullable=False, index=True)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    scan_id = Column(GUID(), ForeignKey("scans.id"), nullable=False, index=True)
     report_type = Column(String(50), nullable=False)  # pdf, html, csv
     file_path = Column(Text, nullable=False)
     file_size = Column(Integer)

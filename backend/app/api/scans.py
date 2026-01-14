@@ -17,7 +17,7 @@ from app.schemas import (
     FindingsListResponse,
     ScanStatistics
 )
-from app.models import Scan, ScanStatus, Finding, RiskLevel
+from app.models import Scan, ScanStatus, Finding, RiskLevel, DorkQuery
 from app.services.dork_generator import DorkGeneratorService
 from app.services.scan_executor import ScanExecutorService
 
@@ -82,15 +82,25 @@ async def execute_scan_background(scan_id: UUID, db: Session):
         dork_service = DorkGeneratorService()
         queries = dork_service.generate_dorks(scan.target_domain, scan.scan_profile)
         scan.total_queries = len(queries)
+        
+        # Create DorkQuery objects in the database
+        for query_data in queries:
+            dork_query = DorkQuery(
+                scan_id=scan_id,
+                query_text=query_data.get('query_text', str(query_data)) if isinstance(query_data, dict) else query_data,
+                category=query_data.get('category', 'general') if isinstance(query_data, dict) else 'general',
+                status="pending"
+            )
+            db.add(dork_query)
         db.commit()
         
         logger.info(f"📋 Generated {len(queries)} dork queries for scan {scan_id}")
         
-        # Execute scan (will be implemented in Phase 2)
-        # executor = ScanExecutorService(db)
-        # await executor.execute_scan(scan_id, queries)
+        # Execute scan to generate findings
+        executor = ScanExecutorService(db)
+        executor.execute_scan(scan_id, queries)
         
-        # For now, mark as completed
+        # Mark as completed
         scan.status = "completed"
         scan.completed_at = datetime.utcnow()
         db.commit()

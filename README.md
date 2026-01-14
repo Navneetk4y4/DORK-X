@@ -36,10 +36,18 @@ This tool is intended ONLY for:
 ```
 DORK-X/
 ├── backend/          # FastAPI Python backend
-├── frontend/         # Next.js React frontend
-├── database/         # PostgreSQL scripts
-├── reports/          # Generated reports
-└── docs/            # Documentation
+│   ├── app/
+│   │   ├── api/      # API endpoints
+│   │   ├── core/     # Configuration
+│   │   ├── models/   # Database models
+│   │   └── services/ # Business logic & Google Search
+│   └── requirements.txt
+├── frontend/         # Next.js 16 React frontend
+│   ├── app/          # App router pages
+│   ├── components/   # React components
+│   └── lib/          # Utilities & API client
+├── reports/          # Generated PDF/HTML reports
+└── .venv/           # Python virtual environment
 ```
 
 ## 🚀 Quick Start
@@ -47,53 +55,50 @@ DORK-X/
 ### Prerequisites
 - Python 3.11+
 - Node.js 18+
-- PostgreSQL 15+
-- Redis 7+
-- Docker & Docker Compose (optional)
+- Google Custom Search API credentials (for real results)
 
 ### Installation
 
-1. **Clone and setup:**
+1. **Backend setup:**
 ```bash
-cd ~/Desktop/DORK-X
+cd /path/to/DORK-X
+
+# Create virtual environment
+python3.11 -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# Install dependencies
+pip install -r backend/requirements.txt
 ```
 
-2. **Backend setup:**
+2. **Configure environment:**
 ```bash
-cd backend
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
-cp .env.example .env
-# Edit .env with your configuration
+# Edit backend/.env with your Google API credentials
+GOOGLE_API_KEY=your-google-api-key
+GOOGLE_CSE_ID=your-custom-search-engine-id
+DATABASE_URL=sqlite:///./dorkx.db
 ```
+
+**Get Google API Keys:**
+- API Key: https://developers.google.com/custom-search/v1/overview
+- CSE ID: https://cse.google.com/cse/ (configure to search entire web)
 
 3. **Frontend setup:**
 ```bash
-cd ../frontend
+cd frontend
 npm install
-cp .env.local.example .env.local
-# Edit .env.local with your configuration
 ```
 
-4. **Database setup:**
+4. **Run the application:**
+
+**Terminal 1 - Backend:**
 ```bash
-# Start PostgreSQL and Redis
-docker-compose up -d db redis
-# Run migrations
+source .venv/bin/activate
 cd backend
-alembic upgrade head
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-5. **Run the application:**
-
-Terminal 1 (Backend):
-```bash
-cd backend
-uvicorn app.main:app --reload --port 8000
-```
-
-Terminal 2 (Frontend):
+**Terminal 2 - Frontend:**
 ```bash
 cd frontend
 npm run dev
@@ -103,45 +108,58 @@ Access at: http://localhost:3000
 
 ## 🔧 Configuration
 
-### Backend (.env)
+### Backend Environment (`backend/.env`)
 ```env
-DATABASE_URL=postgresql://user:password@localhost:5432/dorkx
-REDIS_URL=redis://localhost:6379
-SECRET_KEY=your-secret-key-here
+# Database - SQLite (no setup required)
+DATABASE_URL=sqlite:///./dorkx.db
+
+# Search APIs (Required for real results)
 GOOGLE_API_KEY=your-google-api-key
 GOOGLE_CSE_ID=your-custom-search-engine-id
-BING_API_KEY=your-bing-api-key
+
+# Security
+SECRET_KEY=dev-secret-key
+JWT_SECRET=dev-jwt-secret
+
+# Optional: Redis for caching (not required)
+REDIS_URL=redis://localhost:6379
 ```
 
-### Frontend (.env.local)
+### Frontend Environment (`frontend/.env.local`)
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:8000
 ```
 
 ## 📚 Usage
 
-1. **Start a Scan:**
-   - Navigate to the dashboard
+1. **Configure Google API:**
+   - Get API key from [Google Cloud Console](https://console.cloud.google.com)
+   - Create Custom Search Engine at [CSE Portal](https://cse.google.com)
+   - **Important:** Configure CSE to "Search the entire web"
+   - Add credentials to `backend/.env`
+
+2. **Start a Scan:**
+   - Navigate to http://localhost:3000
    - Enter target domain (e.g., `example.com`)
    - Accept legal disclaimer
    - Select scan profile (Quick/Standard/Deep)
    - Click "Start Scan"
 
-2. **View Results:**
+3. **View Results:**
    - Real-time progress updates
    - Findings organized by risk level
    - Filter by category, severity, or keyword
    - Click findings for detailed analysis
 
-3. **Generate Report:**
-   - Click "Generate Report"
-   - Choose format (PDF/HTML/CSV)
-   - Download professional penetration testing report
+4. **Generate Report:**
+   - Click "PDF Report" button
+   - Download professional report with all findings
 
 ## 🛡️ Security Features
 
+- **Google Custom Search**: Real dorking via official API
 - **Input Validation**: Strict domain validation and sanitization
-- **Rate Limiting**: Per-user and per-IP request limits
+- **Rate Limiting**: API quota management (100 queries/day free tier)
 - **Scope Control**: Automatic blocking of unauthorized targets
 - **Audit Logging**: Complete activity tracking
 - **API Key Protection**: Environment-based credential management
