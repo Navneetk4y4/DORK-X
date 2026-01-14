@@ -80,6 +80,9 @@ logs/
 
 # ==== DOCKER ====
 docker-compose.override.yml
+# Old Dockerfiles in subdirectories (using single Dockerfile at root now)
+backend/Dockerfile
+frontend/Dockerfile
 
 # ==== SECURITY ====
 **/secrets/

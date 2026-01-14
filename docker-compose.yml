@@ -37,11 +37,12 @@ services:
       timeout: 5s
       retries: 5
 
-  # FastAPI Backend Service
+  # FastAPI Backend Service (from single Dockerfile)
   backend:
     build:
-      context: ./backend
+      context: .
       dockerfile: Dockerfile
+      target: backend-runtime
     container_name: dorkx-backend
     ports:
       - "8000:8000"
@@ -65,11 +66,12 @@ services:
       - ./reports:/app/reports
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
-  # Next.js Frontend Service
+  # Next.js Frontend Service (from single Dockerfile)
   frontend:
     build:
-      context: ./frontend
+      context: .
       dockerfile: Dockerfile
+      target: frontend-runtime
     container_name: dorkx-frontend
     ports:
       - "3000:3000"
