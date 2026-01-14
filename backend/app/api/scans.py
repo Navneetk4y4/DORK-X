@@ -44,7 +44,7 @@ async def create_scan(
     scan = Scan(
         target_domain=request.target_domain,
         scan_profile=request.scan_profile.value,
-        status=ScanStatus.PENDING,
+        status="pending",
         user_id=request.user_id,
         consent_accepted_at=datetime.utcnow()
     )
@@ -75,7 +75,7 @@ async def execute_scan_background(scan_id: UUID, db: Session):
             logger.error(f"❌ Scan not found: {scan_id}")
             return
         
-        scan.status = ScanStatus.RUNNING
+        scan.status = "running"
         db.commit()
         
         # Generate dork queries
@@ -91,7 +91,7 @@ async def execute_scan_background(scan_id: UUID, db: Session):
         # await executor.execute_scan(scan_id, queries)
         
         # For now, mark as completed
-        scan.status = ScanStatus.COMPLETED
+        scan.status = "completed"
         scan.completed_at = datetime.utcnow()
         db.commit()
         
@@ -99,7 +99,7 @@ async def execute_scan_background(scan_id: UUID, db: Session):
         
     except Exception as e:
         logger.error(f"❌ Scan execution failed: {str(e)}")
-        scan.status = ScanStatus.FAILED
+        scan.status = "failed"
         scan.error_message = str(e)
         db.commit()
 
