@@ -313,4 +313,117 @@ async def get_dork_category_detail(category_key: str):
     }
 
 
+@router.get("/scans/analytics/overview")
+async def get_analytics_overview(db: Session = Depends(get_db)):
+    """
+    Get aggregated analytics across all scans
+    Returns: total scans, risk distribution, top domains, scan trends
+    """
+    from sqlalchemy import func, desc
+    from datetime import datetime, timedelta
+    
+    # Total scans by status
+    total_scans = db.query(Scan).count()
+    completed_scans = db.query(Scan).filter(Scan.status == "completed").count()
+    failed_scans = db.query(Scan).filter(Scan.status == "failed").count()
+    running_scans = db.query(Scan).filter(Scan.status == "running").count()
+    
+    # Total findings across all scans
+    total_findings = db.query(Finding).count()
+    
+    # Risk distribution across all scans
+    critical_findings = db.query(Finding).filter(Finding.risk_level == "critical").count()
+    high_findings = db.query(Finding).filter(Finding.risk_level == "high").count()
+    medium_findings = db.query(Finding).filter(Finding.risk_level == "medium").count()
+    low_findings = db.query(Finding).filter(Finding.risk_level == "low").count()
+    info_findings = db.query(Finding).filter(Finding.risk_level == "info").count()
+    
+    # Most scanned domains (top 10)
+    most_scanned = db.query(
+        Scan.target_domain,
+        func.count(Scan.id).label('scan_count')
+    ).group_by(Scan.target_domain).order_by(desc('scan_count')).limit(10).all()
+    
+    most_scanned_domains = [
+        {"domain": domain, "count": count} 
+        for domain, count in most_scanned
+    ]
+    
+    # Category frequency across all findings
+    category_freq = db.query(
+        Finding.category,
+        func.count(Finding.id).label('count')
+    ).group_by(Finding.category).order_by(desc('count')).limit(10).all()
+    
+    category_distribution = {
+        category: count 
+        for category, count in category_freq
+    }
+    
+    # Scan trends by date (last 30 days)
+    thirty_days_ago = datetime.utcnow() - timedelta(days=30)
+    recent_scans = db.query(
+        func.date(Scan.started_at).label('date'),
+        func.count(Scan.id).label('count')
+    ).filter(
+        Scan.started_at >= thirty_days_ago
+    ).group_by(func.date(Scan.started_at)).order_by('date').all()
+    
+    scan_timeline = [
+        {"date": str(date), "count": count}
+        for date, count in recent_scans
+    ]
+    
+    # Average findings per scan
+    avg_findings = total_findings / total_scans if total_scans > 0 else 0
+    
+    # Scan profile distribution
+    profile_dist = db.query(
+        Scan.scan_profile,
+        func.count(Scan.id).label('count')
+    ).group_by(Scan.scan_profile).all()
+    
+    profile_distribution = {
+        profile: count
+        for profile, count in profile_dist
+    }
+    
+    return {
+        "summary": {
+            "total_scans": total_scans,
+            "completed_scans": completed_scans,
+            "failed_scans": failed_scans,
+            "running_scans": running_scans,
+            "total_findings": total_findings,
+            "average_findings_per_scan": round(avg_findings, 2)
+        },
+        "risk_distribution": {
+            "critical": critical_findings,
+            "high": high_findings,
+            "medium": medium_findings,
+            "low": low_findings,
+            "info": info_findings
+        },
+        "most_scanned_domains": most_scanned_domains,
+        "category_distribution": category_distribution,
+        "scan_timeline": scan_timeline,
+        "profile_distribution": profile_distribution
+    }
+
+
+@router.delete("/scans/{scan_id}", status_code=204)
+async def delete_scan(scan_id: UUID, db: Session = Depends(get_db)):
+    """
+    Delete a scan and all associated data
+    """
+    scan = db.query(Scan).filter(Scan.id == scan_id).first()
+    
+    if not scan:
+        raise HTTPException(status_code=404, detail="Scan not found")
+    
+    db.delete(scan)
+    db.commit()
+    
+    logger.info(f"🗑️ Scan deleted: {scan_id}")
+    
     return None

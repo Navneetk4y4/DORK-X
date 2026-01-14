@@ -13,6 +13,7 @@ export default function Footer() {
             <h3 className="text-white font-semibold mb-4">Resources</h3>
             <ul className="text-gray-400 text-sm space-y-2">
               <li><a href="/" className="hover:text-white transition">Home</a></li>
+              <li><a href="/dashboard" className="hover:text-white transition">Dashboard</a></li>
               <li><a href="/categories" className="hover:text-white transition">Dork Categories</a></li>
               <li><a href="http://localhost:8000/docs" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">API Docs</a></li>
             </ul>

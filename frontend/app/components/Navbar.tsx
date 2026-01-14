@@ -14,6 +14,9 @@ export default function Navbar() {
           <Link href="/" className="text-gray-300 hover:text-white transition text-sm">
             Home
           </Link>
+          <Link href="/dashboard" className="text-gray-300 hover:text-white transition text-sm">
+            Dashboard
+          </Link>
           <Link href="/categories" className="text-gray-300 hover:text-white transition text-sm">
             Categories
           </Link>
