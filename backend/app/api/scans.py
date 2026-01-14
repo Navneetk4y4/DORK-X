@@ -155,23 +155,23 @@ async def get_scan_findings(scan_id: UUID, db: Session = Depends(get_db)):
     risk_distribution = {
         "critical": db.query(Finding).filter(
             Finding.scan_id == scan_id,
-            Finding.risk_level == RiskLevel.CRITICAL
+            Finding.risk_level == "critical"
         ).count(),
         "high": db.query(Finding).filter(
             Finding.scan_id == scan_id,
-            Finding.risk_level == RiskLevel.HIGH
+            Finding.risk_level == "high"
         ).count(),
         "medium": db.query(Finding).filter(
             Finding.scan_id == scan_id,
-            Finding.risk_level == RiskLevel.MEDIUM
+            Finding.risk_level == "medium"
         ).count(),
         "low": db.query(Finding).filter(
             Finding.scan_id == scan_id,
-            Finding.risk_level == RiskLevel.LOW
+            Finding.risk_level == "low"
         ).count(),
         "info": db.query(Finding).filter(
             Finding.scan_id == scan_id,
-            Finding.risk_level == RiskLevel.INFO
+            Finding.risk_level == "info"
         ).count(),
     }
     
@@ -195,27 +195,27 @@ async def get_scan_statistics(scan_id: UUID, db: Session = Depends(get_db)):
     # Count findings by risk level
     critical_count = db.query(Finding).filter(
         Finding.scan_id == scan_id,
-        Finding.risk_level == RiskLevel.CRITICAL
+        Finding.risk_level == "critical"
     ).count()
     
     high_count = db.query(Finding).filter(
         Finding.scan_id == scan_id,
-        Finding.risk_level == RiskLevel.HIGH
+        Finding.risk_level == "high"
     ).count()
     
     medium_count = db.query(Finding).filter(
         Finding.scan_id == scan_id,
-        Finding.risk_level == RiskLevel.MEDIUM
+        Finding.risk_level == "medium"
     ).count()
     
     low_count = db.query(Finding).filter(
         Finding.scan_id == scan_id,
-        Finding.risk_level == RiskLevel.LOW
+        Finding.risk_level == "low"
     ).count()
     
     info_count = db.query(Finding).filter(
         Finding.scan_id == scan_id,
-        Finding.risk_level == RiskLevel.INFO
+        Finding.risk_level == "info"
     ).count()
     
     # Get category distribution
@@ -227,13 +227,13 @@ async def get_scan_statistics(scan_id: UUID, db: Session = Depends(get_db)):
     # Get top risks
     top_risks = db.query(Finding).filter(
         Finding.scan_id == scan_id,
-        Finding.risk_level.in_([RiskLevel.CRITICAL, RiskLevel.HIGH])
+        Finding.risk_level.in_(["critical", "high"])
     ).limit(5).all()
     
     top_risks_list = [
         {
             "url": f.url,
-            "risk_level": f.risk_level.value,
+            "risk_level": f.risk_level,
             "category": f.category,
             "title": f.title
         }
