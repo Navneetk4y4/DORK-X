@@ -1,7 +1,10 @@
 version: '3.8'
 
+# DORK-X Simplified Docker Compose
+# Single configuration for all services
+
 services:
-  # PostgreSQL Database
+  # PostgreSQL Database Service
   db:
     image: postgres:15-alpine
     container_name: dorkx-postgres
@@ -20,7 +23,7 @@ services:
       timeout: 5s
       retries: 5
 
-  # Redis Cache
+  # Redis Cache Service
   redis:
     image: redis:7-alpine
     container_name: dorkx-redis
@@ -34,7 +37,7 @@ services:
       timeout: 5s
       retries: 5
 
-  # Backend API (FastAPI)
+  # FastAPI Backend Service
   backend:
     build:
       context: ./backend
@@ -43,12 +46,15 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgresql://dorkx_user:dorkx_password@db:5432/dorkx_db
-      - REDIS_URL=redis://redis:6379
-      - SECRET_KEY=${SECRET_KEY}
-      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
-      - GOOGLE_CSE_ID=${GOOGLE_CSE_ID}
-      - BING_API_KEY=${BING_API_KEY}
+      DATABASE_URL: postgresql://dorkx_user:dorkx_password@db:5432/dorkx_db
+      REDIS_URL: redis://redis:6379
+      SECRET_KEY: ${SECRET_KEY:-dev-secret-key-change-in-production}
+      JWT_SECRET: ${JWT_SECRET:-dev-jwt-secret-change-in-production}
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY:-}
+      GOOGLE_CSE_ID: ${GOOGLE_CSE_ID:-}
+      BING_API_KEY: ${BING_API_KEY:-}
+      ENVIRONMENT: development
+      DEBUG: "true"
     depends_on:
       db:
         condition: service_healthy
@@ -59,7 +65,7 @@ services:
       - ./reports:/app/reports
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
-  # Frontend (Next.js)
+  # Next.js Frontend Service
   frontend:
     build:
       context: ./frontend
@@ -68,7 +74,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      NEXT_PUBLIC_API_URL: http://localhost:8000
     depends_on:
       - backend
     volumes:
@@ -77,10 +83,14 @@ services:
       - /app/.next
     command: npm run dev
 
+# Persistent Volumes
 volumes:
   postgres_data:
+    driver: local
   redis_data:
+    driver: local
 
+# Network (default, automatically created)
 networks:
   default:
     name: dorkx-network
