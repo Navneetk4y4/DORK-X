@@ -1,7 +1,6 @@
-version: '3.8'
-
-# DORK-X Simplified Docker Compose
-# Single configuration for all services
+# DORK-X Docker Compose Configuration
+# Automated reconnaissance and security assessment platform
+# Services: PostgreSQL 15, Redis 7, FastAPI backend, Next.js frontend
 
 services:
   # PostgreSQL Database Service

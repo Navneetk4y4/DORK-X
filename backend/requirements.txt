@@ -13,9 +13,9 @@ redis==5.0.1
 hiredis==2.3.2
 
 # Validation & Serialization
-pydantic==2.5.3
-pydantic-settings==2.1.0
-email-validator==2.1.0
+pydantic>=2.5.0
+pydantic-settings>=2.1.0
+email-validator>=2.1.0
 
 # Security
 python-jose[cryptography]==3.3.0
