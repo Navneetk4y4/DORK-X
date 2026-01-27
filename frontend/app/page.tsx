@@ -35,7 +35,7 @@ export default function Home() {
     setValidationResult(null);
 
     try {
-      const result = await validateTarget({ target: targetDomain });
+      const result = await validateTarget(targetDomain);
       setValidationResult(result);
       
       if (result.valid) {

@@ -11,6 +11,9 @@ from app.core.config import settings
 
 
 def _create_engine():
+    if not settings.DATABASE_URL:
+        raise RuntimeError("DATABASE_URL is not configured")
+
     # SQLite needs different engine args (no pool sizing and check_same_thread flag)
     if settings.DATABASE_URL.startswith("sqlite"):
         return create_engine(

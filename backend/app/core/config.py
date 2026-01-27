@@ -1,72 +1,34 @@
-"""
-Application Configuration
-Centralized settings management using Pydantic
-"""
-
 from pydantic_settings import BaseSettings
-from typing import List
-import os
+from pydantic import Field
 
 
 class Settings(BaseSettings):
-    """
-    Application settings loaded from environment variables
-    """
-    
-    # Application
-    APP_NAME: str = "DORK-X"
-    VERSION: str = "1.0.0"
-    ENVIRONMENT: str = "development"
-    DEBUG: bool = True
-    LOG_LEVEL: str = "INFO"
-    
-    # Security
-    SECRET_KEY: str
-    JWT_SECRET: str = "your-jwt-secret-key"
-    ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
-    
-    # Database
-    DATABASE_URL: str
-    
-    # Redis
-    REDIS_URL: str = "redis://localhost:6379"
-    
-    # Search Engine APIs
-    GOOGLE_API_KEY: str = ""
-    GOOGLE_CSE_ID: str = ""
-    BING_API_KEY: str = ""
-    
-    # Rate Limiting
-    MAX_QUERIES_PER_DAY: int = 100
-    MAX_QUERIES_PER_SESSION: int = 20
-    QUERY_DELAY_SECONDS: int = 3
-    MAX_REQUESTS_PER_MINUTE: int = 10
-    
-    # CORS
-    ALLOWED_ORIGINS: str = "http://localhost:3000"
-    
-    # Report Storage
-    REPORT_STORAGE_PATH: str = "/Users/navneetkumar/Desktop/DORK-X/reports"
-    
-    # Scanning Configuration
-    MAX_RESULTS_PER_QUERY: int = 10
-    SCAN_TIMEOUT_MINUTES: int = 30
-    
-    # Blocked Domains (for safety)
-    BLOCKED_TLDS: List[str] = [".gov", ".mil", ".edu"]
-    BLOCKED_DOMAINS: List[str] = [
-        "localhost",
-        "127.0.0.1",
-        "0.0.0.0",
-        "internal",
-        "local"
+    PROJECT_NAME: str = "DORK-X"
+    API_V1_STR: str = "/api/v1"
+
+    DATABASE_URL: str = ""
+    REDIS_URL: str = ""
+    SECRET_KEY: str = "change-me"
+
+    GOOGLE_API_KEY: str | None = None
+    GOOGLE_CSE_ID: str | None = None
+    ALLOWED_ORIGINS: str = ""
+    REPORT_STORAGE_PATH: str | None = None
+    BING_API_KEY: str | None = None
+
+    BLOCKED_TLDS: list[str] = [
+        ".local", ".localhost", ".internal", ".test", ".example", ".invalid"
     ]
-    
+    BLOCKED_DOMAINS: list[str] = [
+        "localhost", "127.0.0.1", "0.0.0.0"
+    ]
+
+    DEBUG: bool = False
+    ENVIRONMENT: str = 'development'
+
     class Config:
         env_file = ".env"
         case_sensitive = True
 
 
-# Initialize settings
 settings = Settings()
