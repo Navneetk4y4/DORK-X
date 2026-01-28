@@ -17,6 +17,7 @@ from app.schemas import (
     FindingsListResponse,
     ScanStatistics
 )
+from app.schemas.schemas import FindingResponse
 from app.models import Scan, ScanStatus, Finding, RiskLevel, DorkQuery
 from app.services.dork_generator import DorkGeneratorService
 from app.services.scan_executor import ScanExecutorService
@@ -179,10 +180,31 @@ async def get_scan_findings(scan_id: UUID, db: Session = Depends(get_db)):
             query_map = {q.id: q.query_text for q in queries}
 
     findings_with_query = []
+    from loguru import logger
     for f in findings:
         finding_dict = f.__dict__.copy()
-        finding_dict['query'] = query_map.get(f.query_id) if f.query_id else None
-        findings_with_query.append(FindingResponse(**finding_dict))
+        logger.debug(f"Raw finding: {finding_dict}")
+        if f.query_id and f.query_id not in query_map:
+            logger.warning(f"Finding {f.id} has missing or invalid query_id {f.query_id}, setting query to None.")
+            finding_dict['query'] = None
+        else:
+            finding_dict['query'] = query_map.get(f.query_id) if f.query_id else None
+        try:
+            findings_with_query.append(FindingResponse(**finding_dict))
+        except Exception as e:
+            logger.error(f"Failed to serialize finding {f.id}: {e}\nData: {finding_dict}")
+            # Try to forcefully coerce missing/invalid fields to None and retry
+            import traceback
+            logger.error(traceback.format_exc())
+            for key in ['title','snippet','file_type','category','risk_level','risk_rationale','owasp_mapping','remediation','discovered_at','is_false_positive','query']:
+                if key not in finding_dict:
+                    finding_dict[key] = None
+            try:
+                findings_with_query.append(FindingResponse(**finding_dict))
+                logger.warning(f"Force-included finding {f.id} with missing fields.")
+            except Exception as e2:
+                logger.error(f"Still failed to serialize finding {f.id}: {e2}\nData: {finding_dict}")
+            continue
 
     # Calculate risk distribution
     risk_distribution = {

@@ -18,7 +18,7 @@ import {
   FileText,
   Download
 } from 'lucide-react';
-import { getScan, getScanFindings, getScanStatistics, generateReport } from '@/lib/api-service';
+import { getScan, getScanFindings, getScanStatistics, generateReport, getScanReports } from '@/lib/api-service';
 import { formatDate, getRiskColor, getStatusColor } from '@/lib/utils';
 import Navbar from '@/app/components/Navbar';
 import Footer from '@/app/components/Footer';
@@ -34,17 +34,18 @@ export default function ScanPage({ params }: { params: Promise<{ id: string }> }
   const [error, setError] = useState<string | null>(null);
   const [selectedRiskFilter, setSelectedRiskFilter] = useState<string>('all');
   const [isGeneratingReport, setIsGeneratingReport] = useState(false);
+  const [reports, setReports] = useState<any[]>([]);
 
   useEffect(() => {
     loadScanData();
-    
+    loadReports();
     // Poll for updates if scan is running
     const interval = setInterval(() => {
       if (scan?.status === 'running' || scan?.status === 'pending') {
         loadScanData();
+        loadReports();
       }
     }, 5000);
-
     return () => clearInterval(interval);
   }, [id, scan?.status]);
 
@@ -80,6 +81,15 @@ export default function ScanPage({ params }: { params: Promise<{ id: string }> }
       setError(err.response?.data?.message || 'Failed to load scan data');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const loadReports = async () => {
+    try {
+      const data = await getScanReports(id);
+      setReports(data || []);
+    } catch (err) {
+      setReports([]);
     }
   };
 
@@ -172,23 +182,34 @@ export default function ScanPage({ params }: { params: Promise<{ id: string }> }
 
             {scan.status === 'completed' && (
               <div className="flex space-x-2">
-                <button
-                  onClick={() => handleGenerateReport('pdf')}
-                  disabled={isGeneratingReport}
-                  className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-lime-500 text-black rounded-lg hover:from-cyan-400 hover:to-lime-400 disabled:from-gray-600 disabled:to-gray-700 flex items-center space-x-2 font-semibold"
-                >
-                  <Download className="w-4 h-4" />
-                  <span>PDF Report</span>
-                </button>
-                <a
-                  href={`http://localhost:8000/api/v1/reports?scan_id=${scan.id}&report_type=csv`}
-                  download={`dorkx_report_${scan.id}.csv`}
-                  className="px-4 py-2 bg-gradient-to-r from-lime-500 to-cyan-500 text-black rounded-lg hover:from-lime-400 hover:to-cyan-400 flex items-center space-x-2 font-semibold"
-                  style={{ textDecoration: 'none' }}
-                >
-                  <Download className="w-4 h-4" />
-                  <span>CSV Report</span>
-                </a>
+                {/* Only one button for CSV: download if exists, else generate */}
+                {(() => {
+                  const csvReport = reports.find((r) => r.report_type === 'csv');
+                  if (csvReport) {
+                    return (
+                      <a
+                        href={`http://localhost:8000${csvReport.download_url}`}
+                        download={`dorkx_report_${scan.id}.csv`}
+                        className="px-4 py-2 bg-gradient-to-r from-lime-500 to-cyan-500 text-black rounded-lg hover:from-lime-400 hover:to-cyan-400 flex items-center space-x-2 font-semibold"
+                        style={{ textDecoration: 'none' }}
+                      >
+                        <Download className="w-4 h-4" />
+                        <span>Download CSV</span>
+                      </a>
+                    );
+                  } else {
+                    return (
+                      <button
+                        onClick={() => handleGenerateReport('csv')}
+                        disabled={isGeneratingReport}
+                        className="px-4 py-2 bg-gradient-to-r from-lime-500 to-cyan-500 text-black rounded-lg hover:from-lime-400 hover:to-cyan-400 disabled:from-gray-600 disabled:to-gray-700 flex items-center space-x-2 font-semibold"
+                      >
+                        <Download className="w-4 h-4" />
+                        <span>Generate CSV</span>
+                      </button>
+                    );
+                  }
+                })()}
               </div>
             )}
           </div>

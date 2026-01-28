@@ -80,13 +80,13 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-black via-slate-950 to-black relative overflow-x-hidden">
       <Navbar />
 
-      {/* Futuristic animated background: neon grid, moving orbs, and scanlines */}
+      {/* Optimized animated background: smaller orbs, lighter blur, GPU hints */}
       <div className="fixed inset-0 pointer-events-none z-0">
-        {/* Neon orbs */}
-        <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-cyan-400/20 rounded-full blur-3xl animate-pulse-slow" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-lime-400/20 rounded-full blur-3xl animate-pulse-slow" />
-        {/* Animated scanlines */}
-        <div className="absolute inset-0 bg-[repeating-linear-gradient(180deg,rgba(0,255,247,0.04)_0_2px,transparent_2px_40px)] opacity-60 animate-scanlines" />
+        {/* Neon orbs - smaller, less blur, GPU-accelerated */}
+        <div className="absolute top-[-8%] left-[-8%] w-[260px] h-[260px] bg-cyan-400/15 rounded-full blur-xl animate-pulse-slow will-change-transform" style={{ filter: 'blur(32px)' }} />
+        <div className="absolute bottom-[-8%] right-[-8%] w-[260px] h-[260px] bg-lime-400/15 rounded-full blur-xl animate-pulse-slow will-change-transform" style={{ filter: 'blur(32px)' }} />
+        {/* Animated scanlines - lower opacity, GPU-accelerated */}
+        <div className="absolute inset-0 bg-[repeating-linear-gradient(180deg,rgba(0,255,247,0.03)_0_2px,transparent_2px_40px)] opacity-40 animate-scanlines will-change-opacity" />
       </div>
 
       {/* Hero Section with Navigation */}
@@ -164,22 +164,22 @@ export default function Home() {
       <style jsx global>{`
         @keyframes pulse-slow {
           0%, 100% { opacity: 0.7; transform: scale(1); }
-          50% { opacity: 1; transform: scale(1.08); }
+          50% { opacity: 1; transform: scale(1.04); }
         }
-        .animate-pulse-slow { animation: pulse-slow 6s infinite cubic-bezier(.4,0,.2,1); }
+        .animate-pulse-slow { animation: pulse-slow 6s infinite cubic-bezier(.4,0,.2,1); will-change: transform, opacity; }
         @keyframes scanlines {
           0% { background-position-y: 0; }
           100% { background-position-y: 40px; }
         }
-        .animate-scanlines { animation: scanlines 2.5s linear infinite; }
+        .animate-scanlines { animation: scanlines 2.5s linear infinite; will-change: background-position-y, opacity; }
         @keyframes glow {
           0%, 100% { box-shadow: 0 0 32px 0 #00fff7, 0 0 8px 0 #a8ff60; }
-          50% { box-shadow: 0 0 64px 8px #00fff7, 0 0 24px 8px #a8ff60; }
+          50% { box-shadow: 0 0 48px 4px #00fff7, 0 0 16px 4px #a8ff60; }
         }
         .animate-glow { animation: glow 3.5s infinite alternate; }
         @keyframes neon {
           0%, 100% { filter: drop-shadow(0 0 8px #00fff7) drop-shadow(0 0 2px #a8ff60); }
-          50% { filter: drop-shadow(0 0 24px #00fff7) drop-shadow(0 0 8px #a8ff60); }
+          50% { filter: drop-shadow(0 0 16px #00fff7) drop-shadow(0 0 4px #a8ff60); }
         }
         .animate-neon { animation: neon 2.5s infinite alternate; }
         @keyframes gradient-move {

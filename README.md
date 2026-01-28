@@ -1,11 +1,26 @@
+
 # DORK-X
 
-Automated OSINT Reconnaissance Platform
+Cloud Exposure & Misconfiguration Detection Platform
+
+---
+
+**DORK-X — Cloud Exposure & Misconfiguration Detection**  
+Sep 2025  
+– Repository: github.com/Navneetk4y4/dorkx  
+– Engineered a Python-based automation platform to identify cloud asset exposures and misconfigurations using advanced dorking techniques.  
+– Automated discovery of public cloud storage leaks, exposed APIs, and misconfigured cloud services across AWS, Azure, and GCP.  
+– Enhanced cloud security posture by enabling rapid detection and remediation of risky cloud resources, reducing manual cloud audit time by 70 percent.  
+– Generated structured JSON and CSV reports for integration with SIEMs, compliance tools, and cloud-native security platforms.
+
+---
+
 
 ## Features
 - Automated Google dorking & OSINT reconnaissance
+- Cloud asset exposure & misconfiguration detection (AWS, Azure, GCP)
 - Risk-based finding classification
-- Professional pentesting reports
+- Professional pentesting & cloud security reports (JSON/CSV)
 - Analytics dashboard
 - 20+ reconnaissance categories
 - API-first design (FastAPI backend, Next.js frontend)
