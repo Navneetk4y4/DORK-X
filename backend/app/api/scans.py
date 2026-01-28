@@ -169,7 +169,21 @@ async def get_scan_findings(scan_id: UUID, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Scan not found")
     
     findings = db.query(Finding).filter(Finding.scan_id == scan_id).all()
-    
+    # Preload queries for mapping
+    query_map = {}
+    if findings:
+        query_ids = list({f.query_id for f in findings if f.query_id})
+        if query_ids:
+            from app.models import DorkQuery
+            queries = db.query(DorkQuery).filter(DorkQuery.id.in_(query_ids)).all()
+            query_map = {q.id: q.query_text for q in queries}
+
+    findings_with_query = []
+    for f in findings:
+        finding_dict = f.__dict__.copy()
+        finding_dict['query'] = query_map.get(f.query_id) if f.query_id else None
+        findings_with_query.append(FindingResponse(**finding_dict))
+
     # Calculate risk distribution
     risk_distribution = {
         "critical": db.query(Finding).filter(
@@ -193,10 +207,10 @@ async def get_scan_findings(scan_id: UUID, db: Session = Depends(get_db)):
             Finding.risk_level == "info"
         ).count(),
     }
-    
+
     return FindingsListResponse(
-        findings=findings,
-        total=len(findings),
+        findings=findings_with_query,
+        total=len(findings_with_query),
         risk_distribution=risk_distribution
     )
 

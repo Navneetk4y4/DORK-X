@@ -1,5 +1,6 @@
 from pydantic_settings import BaseSettings
 from pydantic import Field
+from typing import Optional
 
 
 class Settings(BaseSettings):
@@ -10,11 +11,11 @@ class Settings(BaseSettings):
     REDIS_URL: str = ""
     SECRET_KEY: str = "change-me"
 
-    GOOGLE_API_KEY: str | None = None
-    GOOGLE_CSE_ID: str | None = None
+    GOOGLE_API_KEY: Optional[str] = None
+    GOOGLE_CSE_ID: Optional[str] = None
     ALLOWED_ORIGINS: str = ""
-    REPORT_STORAGE_PATH: str | None = None
-    BING_API_KEY: str | None = None
+    REPORT_STORAGE_PATH: Optional[str] = None
+    BING_API_KEY: Optional[str] = None
 
     BLOCKED_TLDS: list[str] = [
         ".local", ".localhost", ".internal", ".test", ".example", ".invalid"

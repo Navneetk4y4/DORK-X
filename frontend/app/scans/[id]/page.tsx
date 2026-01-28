@@ -180,6 +180,15 @@ export default function ScanPage({ params }: { params: Promise<{ id: string }> }
                   <Download className="w-4 h-4" />
                   <span>PDF Report</span>
                 </button>
+                <a
+                  href={`http://localhost:8000/api/v1/reports?scan_id=${scan.id}&report_type=csv`}
+                  download={`dorkx_report_${scan.id}.csv`}
+                  className="px-4 py-2 bg-gradient-to-r from-lime-500 to-cyan-500 text-black rounded-lg hover:from-lime-400 hover:to-cyan-400 flex items-center space-x-2 font-semibold"
+                  style={{ textDecoration: 'none' }}
+                >
+                  <Download className="w-4 h-4" />
+                  <span>CSV Report</span>
+                </a>
               </div>
             )}
           </div>
@@ -251,6 +260,7 @@ export default function ScanPage({ params }: { params: Promise<{ id: string }> }
                     <tr>
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase">Risk</th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase">Category</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase">Query</th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase">URL</th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase">Discovered</th>
                     </tr>
@@ -265,6 +275,9 @@ export default function ScanPage({ params }: { params: Promise<{ id: string }> }
                         </td>
                         <td className="px-4 py-3 text-sm text-gray-300">
                           {finding.category}
+                        </td>
+                        <td className="px-4 py-3 text-xs text-cyan-300 max-w-xs truncate" title={finding.query || ''}>
+                          {finding.query ? (finding.query.length > 40 ? finding.query.substring(0, 40) + '...' : finding.query) : <span className="text-gray-500">(N/A)</span>}
                         </td>
                         <td className="px-4 py-3">
                           <a

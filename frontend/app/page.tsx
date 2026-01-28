@@ -77,48 +77,51 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-slate-950 to-black">
+    <div className="min-h-screen bg-gradient-to-br from-black via-slate-950 to-black relative overflow-x-hidden">
       <Navbar />
-      
-      {/* Animated background elements - Neon cyber aesthetic */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-cyan-500/15 rounded-full blur-3xl -translate-y-1/2 -translate-x-1/2 animate-pulse"></div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-lime-500/15 rounded-full blur-3xl translate-y-1/2 translate-x-1/2 animate-pulse" style={{ animationDelay: '1s' }}></div>
+
+      {/* Futuristic animated background: neon grid, moving orbs, and scanlines */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        {/* Neon orbs */}
+        <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-cyan-400/20 rounded-full blur-3xl animate-pulse-slow" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-lime-400/20 rounded-full blur-3xl animate-pulse-slow" />
+        {/* Animated scanlines */}
+        <div className="absolute inset-0 bg-[repeating-linear-gradient(180deg,rgba(0,255,247,0.04)_0_2px,transparent_2px_40px)] opacity-60 animate-scanlines" />
       </div>
-      
+
       {/* Hero Section with Navigation */}
       <div className="container mx-auto px-6 py-20 relative z-10">
         <div className="text-center mb-16">
           <div className="flex items-center justify-center mb-8">
-            <div className="p-6 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-lime-500/20 backdrop-blur-xl border border-cyan-400/50 hover:border-cyan-300 transition-all shadow-2xl shadow-cyan-500/30">
-              <Shield className="w-16 h-16 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-lime-400 to-cyan-400 animate-pulse" />
+            <div className="p-6 rounded-2xl bg-gradient-to-br from-cyan-500/30 to-lime-500/30 backdrop-blur-2xl border-2 border-cyan-400/60 hover:border-lime-400/80 transition-all shadow-2xl shadow-cyan-500/40 animate-glow">
+              <Shield className="w-16 h-16 text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-lime-300 to-cyan-300 animate-neon" />
             </div>
           </div>
-          <h1 className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-lime-400 to-cyan-400 mb-4 leading-tight" style={{ textShadow: '0 0 30px rgba(0,213,255,0.5)' }}>
+          <h1 className="text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-lime-300 to-cyan-300 mb-4 leading-tight animate-gradient-move" style={{ textShadow: '0 0 40px #00fff7, 0 0 80px #a8ff60' }}>
             DORK-X
           </h1>
-          <p className="text-2xl text-gray-300 mb-3 font-light">
+          <p className="text-2xl text-cyan-200 mb-3 font-mono font-light animate-fadein">
             Automated OSINT Reconnaissance Platform
           </p>
-          <div className="inline-block px-4 py-2 rounded-full bg-red-500/15 border border-red-500/50 backdrop-blur-xl shadow-lg shadow-red-500/20">
-            <p className="text-sm text-red-400 font-semibold">
+          <div className="inline-block px-4 py-2 rounded-full bg-red-500/20 border-2 border-red-500/60 backdrop-blur-xl shadow-lg shadow-red-500/30 animate-pulse">
+            <p className="text-sm text-red-300 font-semibold tracking-widest animate-flicker">
               ⚠️ FOR AUTHORIZED SECURITY TESTING ONLY ⚠️
             </p>
           </div>
         </div>
 
         {/* Quick Navigation Cards */}
-        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-16">
+        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-16">
           <Link href="/dashboard" className="group">
-            <div className="relative p-8 rounded-2xl bg-gradient-to-br from-cyan-500/10 to-blue-500/10 backdrop-blur-xl border border-cyan-400/30 hover:border-cyan-400 transition-all duration-300 group-hover:from-cyan-500/20 group-hover:to-blue-500/20 group-hover:shadow-xl group-hover:shadow-cyan-500/30 overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-cyan-600/0 to-blue-600/0 group-hover:from-cyan-600/10 group-hover:to-blue-600/10 transition-all duration-300"></div>
+            <div className="relative p-8 rounded-2xl glass border-2 border-cyan-400/40 group-hover:border-cyan-300/80 transition-all duration-300 overflow-hidden shadow-xl shadow-cyan-500/20 group-hover:shadow-cyan-400/40 animate-card-float">
+              <div className="absolute inset-0 bg-gradient-to-br from-cyan-600/0 to-blue-600/0 group-hover:from-cyan-600/10 group-hover:to-blue-600/10 transition-all duration-300 pointer-events-none" />
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">
-                  <BarChart3 className="w-10 h-10 text-cyan-400 group-hover:text-cyan-300 transition-colors" />
-                  <ArrowRight className="w-5 h-5 text-cyan-400/60 group-hover:text-cyan-300 group-hover:translate-x-1 transition-all" />
+                  <BarChart3 className="w-10 h-10 text-cyan-300 group-hover:text-cyan-200 transition-colors animate-icon-bounce" />
+                  <ArrowRight className="w-5 h-5 text-cyan-300/60 group-hover:text-cyan-200 group-hover:translate-x-1 transition-all animate-arrow-move" />
                 </div>
-                <h3 className="font-bold text-lg mb-2 text-white">Analytics Dashboard</h3>
-                <p className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
+                <h3 className="font-bold text-lg mb-2 text-cyan-100 tracking-wide animate-fadein">Analytics Dashboard</h3>
+                <p className="text-sm text-cyan-200/80 group-hover:text-cyan-100 transition-colors animate-fadein">
                   View scan history, statistics, and comprehensive analytics with interactive charts
                 </p>
               </div>
@@ -126,15 +129,15 @@ export default function Home() {
           </Link>
 
           <Link href="/categories" className="group">
-            <div className="relative p-8 rounded-2xl bg-gradient-to-br from-lime-500/10 to-green-500/10 backdrop-blur-xl border border-lime-400/30 hover:border-lime-400 transition-all duration-300 group-hover:from-lime-500/20 group-hover:to-green-500/20 group-hover:shadow-xl group-hover:shadow-lime-500/30 overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-lime-600/0 to-green-600/0 group-hover:from-lime-600/10 group-hover:to-green-600/10 transition-all duration-300"></div>
+            <div className="relative p-8 rounded-2xl glass border-2 border-lime-400/40 group-hover:border-lime-300/80 transition-all duration-300 overflow-hidden shadow-xl shadow-lime-500/20 group-hover:shadow-lime-400/40 animate-card-float">
+              <div className="absolute inset-0 bg-gradient-to-br from-lime-600/0 to-green-600/0 group-hover:from-lime-600/10 group-hover:to-green-600/10 transition-all duration-300 pointer-events-none" />
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">
-                  <List className="w-10 h-10 text-lime-400 group-hover:text-lime-300 transition-colors" />
-                  <ArrowRight className="w-5 h-5 text-lime-400/60 group-hover:text-lime-300 group-hover:translate-x-1 transition-all" />
+                  <List className="w-10 h-10 text-lime-300 group-hover:text-lime-200 transition-colors animate-icon-bounce" />
+                  <ArrowRight className="w-5 h-5 text-lime-300/60 group-hover:text-lime-200 group-hover:translate-x-1 transition-all animate-arrow-move" />
                 </div>
-                <h3 className="font-bold text-lg mb-2 text-white">Dork Categories</h3>
-                <p className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
+                <h3 className="font-bold text-lg mb-2 text-lime-100 tracking-wide animate-fadein">Dork Categories</h3>
+                <p className="text-sm text-lime-200/80 group-hover:text-lime-100 transition-colors animate-fadein">
                   Explore 20 specialized reconnaissance categories with 200+ query templates
                 </p>
               </div>
@@ -142,21 +145,76 @@ export default function Home() {
           </Link>
 
           <Link href="http://localhost:8000/docs" target="_blank" rel="noopener noreferrer" className="group">
-            <div className="relative p-8 rounded-2xl bg-gradient-to-br from-orange-500/10 to-red-500/10 backdrop-blur-xl border border-orange-400/30 hover:border-orange-400 transition-all duration-300 group-hover:from-orange-500/20 group-hover:to-red-500/20 group-hover:shadow-xl group-hover:shadow-orange-500/30 overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-600/0 to-red-600/0 group-hover:from-orange-600/10 group-hover:to-red-600/10 transition-all duration-300"></div>
+            <div className="relative p-8 rounded-2xl glass border-2 border-pink-400/40 group-hover:border-pink-300/80 transition-all duration-300 overflow-hidden shadow-xl shadow-pink-500/20 group-hover:shadow-pink-400/40 animate-card-float">
+              <div className="absolute inset-0 bg-gradient-to-br from-pink-600/0 to-red-600/0 group-hover:from-pink-600/10 group-hover:to-red-600/10 transition-all duration-300 pointer-events-none" />
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">
-                  <FileText className="w-10 h-10 text-orange-400 group-hover:text-orange-300 transition-colors" />
-                  <ArrowRight className="w-5 h-5 text-orange-400/60 group-hover:text-orange-300 group-hover:translate-x-1 transition-all" />
+                  <FileText className="w-10 h-10 text-pink-300 group-hover:text-pink-200 transition-colors animate-icon-bounce" />
+                  <ArrowRight className="w-5 h-5 text-pink-300/60 group-hover:text-pink-200 group-hover:translate-x-1 transition-all animate-arrow-move" />
                 </div>
-                <h3 className="font-bold text-lg mb-2 text-white">API Documentation</h3>
-                <p className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
+                <h3 className="font-bold text-lg mb-2 text-pink-100 tracking-wide animate-fadein">API Documentation</h3>
+                <p className="text-sm text-pink-200/80 group-hover:text-pink-100 transition-colors animate-fadein">
                   Complete REST API reference with interactive Swagger documentation
                 </p>
               </div>
             </div>
           </Link>
         </div>
+      {/* Animations for cyberpunk/futuristic feel */}
+      <style jsx global>{`
+        @keyframes pulse-slow {
+          0%, 100% { opacity: 0.7; transform: scale(1); }
+          50% { opacity: 1; transform: scale(1.08); }
+        }
+        .animate-pulse-slow { animation: pulse-slow 6s infinite cubic-bezier(.4,0,.2,1); }
+        @keyframes scanlines {
+          0% { background-position-y: 0; }
+          100% { background-position-y: 40px; }
+        }
+        .animate-scanlines { animation: scanlines 2.5s linear infinite; }
+        @keyframes glow {
+          0%, 100% { box-shadow: 0 0 32px 0 #00fff7, 0 0 8px 0 #a8ff60; }
+          50% { box-shadow: 0 0 64px 8px #00fff7, 0 0 24px 8px #a8ff60; }
+        }
+        .animate-glow { animation: glow 3.5s infinite alternate; }
+        @keyframes neon {
+          0%, 100% { filter: drop-shadow(0 0 8px #00fff7) drop-shadow(0 0 2px #a8ff60); }
+          50% { filter: drop-shadow(0 0 24px #00fff7) drop-shadow(0 0 8px #a8ff60); }
+        }
+        .animate-neon { animation: neon 2.5s infinite alternate; }
+        @keyframes gradient-move {
+          0% { background-position: 0% 50%; }
+          100% { background-position: 100% 50%; }
+        }
+        .animate-gradient-move { background-size: 200% 200%; animation: gradient-move 8s linear infinite; }
+        @keyframes fadein {
+          from { opacity: 0; transform: translateY(16px); }
+          to { opacity: 1; transform: none; }
+        }
+        .animate-fadein { animation: fadein 1.2s cubic-bezier(.4,0,.2,1) both; }
+        @keyframes flicker {
+          0%, 100% { opacity: 1; }
+          45% { opacity: 0.7; }
+          50% { opacity: 0.3; }
+          55% { opacity: 0.7; }
+        }
+        .animate-flicker { animation: flicker 2.5s infinite; }
+        @keyframes card-float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-8px) scale(1.01); }
+        }
+        .animate-card-float { animation: card-float 4s infinite cubic-bezier(.4,0,.2,1); }
+        @keyframes icon-bounce {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-6px) scale(1.08); }
+        }
+        .animate-icon-bounce { animation: icon-bounce 2.2s infinite cubic-bezier(.4,0,.2,1); }
+        @keyframes arrow-move {
+          0%, 100% { transform: translateX(0); }
+          50% { transform: translateX(8px) scale(1.1); }
+        }
+        .animate-arrow-move { animation: arrow-move 1.8s infinite cubic-bezier(.4,0,.2,1); }
+      `}</style>
 
         {/* Main Card */}
         <div className="max-w-2xl mx-auto">

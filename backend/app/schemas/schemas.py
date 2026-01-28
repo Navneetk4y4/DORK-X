@@ -120,6 +120,7 @@ class FindingResponse(BaseModel):
     remediation: Optional[str]
     discovered_at: datetime
     is_false_positive: bool
+    query: Optional[str] = None  # The dork query that caused this finding
     
     class Config:
         from_attributes = True

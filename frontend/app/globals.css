@@ -1,26 +1,81 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --neon-cyan: #00fff7;
+  --neon-lime: #a8ff60;
+  --neon-pink: #ff00c8;
+  --glass-bg: rgba(10, 20, 30, 0.7);
+  --glass-border: rgba(0,255,247,0.15);
+  --font-tech: 'Share Tech Mono', 'Fira Mono', 'Menlo', 'monospace';
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-tech);
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Futuristic animated grid background */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: repeating-linear-gradient(90deg, rgba(0,255,247,0.04) 0 1px, transparent 1px 80px),
+              repeating-linear-gradient(180deg, rgba(0,255,247,0.04) 0 1px, transparent 1px 80px);
+  pointer-events: none;
+  animation: gridmove 30s linear infinite;
+}
+
+@keyframes gridmove {
+  0% { background-position: 0 0, 0 0; }
+  100% { background-position: 80px 80px, 80px 80px; }
+}
+
+/* Neon glow for headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-tech);
+  text-shadow: 0 0 8px var(--neon-cyan), 0 0 2px var(--neon-lime);
+  letter-spacing: 0.03em;
+}
+
+/* Glassmorphism for cards and modals */
+.glass {
+  background: var(--glass-bg);
+  border: 1.5px solid var(--glass-border);
+  box-shadow: 0 4px 32px 0 rgba(0,255,247,0.08), 0 1.5px 8px 0 rgba(168,255,96,0.04);
+  backdrop-filter: blur(16px) saturate(1.2);
+  border-radius: 1.5rem;
+}
+
+/* Futuristic focus and hover states */
+input:focus, button:focus, select:focus, textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--neon-cyan), 0 0 8px 2px var(--neon-lime);
+  border-color: var(--neon-cyan);
+}
+
+button, .btn {
+  transition: box-shadow 0.2s, border-color 0.2s, background 0.2s;
+}
+button:hover, .btn:hover {
+  box-shadow: 0 0 8px 2px var(--neon-cyan), 0 0 16px 2px var(--neon-pink);
+  border-color: var(--neon-pink);
+}
+
+/* Neon scrollbars */
+::-webkit-scrollbar {
+  width: 10px;
+  background: #101820;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, var(--neon-cyan), var(--neon-lime));
+  border-radius: 8px;
 }
