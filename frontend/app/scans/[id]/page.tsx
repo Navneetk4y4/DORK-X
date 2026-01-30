@@ -97,6 +97,7 @@ export default function ScanPage({ params }: { params: Promise<{ id: string }> }
     setIsGeneratingReport(true);
     try {
       await generateReport(id, format);
+      await loadReports(); // Refresh reports so download button appears
       alert(`${format.toUpperCase()} report generated successfully!`);
     } catch (err: any) {
       alert('Failed to generate report');
