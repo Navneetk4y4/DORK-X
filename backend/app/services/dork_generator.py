@@ -269,25 +269,94 @@ class DorkGeneratorService:
         Initialize comprehensive dork templates for all 20 categories
         Updated with real, tested dorks from Exploit Database Google Hacking Database (GHDB)
         """
-        # FULL 100+ DORK QUERIES FROM USER LIST, MAPPED TO CATEGORIES
-        # For brevity, only a few are shown here. In your actual implementation, paste all 100+ queries from your list below, grouped by logical category.
+        # All 100+ queries mapped to the 20 category keys used in the scan profile
         return {
-            "cloud_devops": [
-                'site:s3.amazonaws.com | site:blob.core.windows.net | site:storage.googleapis.com ("backup" OR "prod" OR "staging") ("{domain}" | "{domain_noprefix}") -inurl:.well-known',
-                'intitle:"Kubernetes Dashboard" intext:"Skip" | "Login" (inurl:/dashboard/ | /ui/) -github -stackoverflow -docs',
+            "sensitive_files": [
+                '(intitle:"index of" "parent directory") (ext:sql | ext:bak | ext:backup | ext:tar.gz | ext:zip) ("db_" | "backup_" | {domain}) -forum -blog',
+                '(ext:sql | ext:dump | ext:db) ("INSERT INTO `users`" | "CREATE TABLE `customers`" | "DROP TABLE") -"test" -"dummy" -site:github.com',
+                '("index of" "/backup" | "index of /sql") (ext:gz | ext:zip | ext:tar | ext:7z) -inurl:/wp-content/ -inurl:/vendor/',
+                '(ext:pdf | ext:doc | ext:docx | ext:xlsx) ("confidential" | "internal" | "not for distribution" | "draft") ("{domain}" | "{domain_noprefix}")',
+                'site:{domain} (filetype:pdf | filetype:docx | filetype:xlsx | filetype:pptx) ("confidential" | "internal" | "not for distribution") -template -sample',
+            ],
+            "login_pages": [
+                '(inurl:/admin | /dashboard | /cp | /controlpanel | /manager) (intitle:"login" | "sign in" | "administrator") site:{domain} -inurl:/wp-admin',
+                '(inurl:/phpmyadmin | /myadmin | /dbadmin | /adminer) (intitle:"phpMyAdmin" | "Adminer") ("index.php" | "setup.php") -"localhost" -"127.0.0.1"',
+                '(inurl:/jmx-console | /web-console | /admin-console | /console) (intitle:"JMX" | "Administration Console" | "Welcome to JBoss") -"localhost"',
+            ],
+            "credentials": [
                 '(filetype:env | filetype:yaml | filetype:yml) ("AWS_ACCESS_KEY_ID" | "DB_PASSWORD" | "SECRET_KEY_BASE") -"example" -"sample"',
                 '(inurl:/.aws/credentials | inurl:/credentials.json | inurl:/.config/gcloud/credentials) -site:github.com -site:gitlab.com',
-                '(intitle:"Docker Registry" | inurl:/v2/_catalog | inurl:/repository/docker) ("repositories" | "tags") -site:docker.io',
-                'inurl:/actuator | /manage | /admin ("heapdump" | "env" | "health" | "metrics") (site:{domain} | intext:"{domain_noprefix}") -docs',
-                '(filetype:tf | filetype:tfvars | filetype:tfstate) ("access_key" | "secret" | "password" | "token") -"dummy" -"placeholder" filetype:tfstate',
-                '(intitle:"Jenkins" "Dashboard [Jenkins]") (inurl:/script | /manage | /view) -inurl:/securityRealm/ -"Welcome to Jenkins"',
+                '(filetype:json | filetype:ini) ("password" | "token" | "apikey") -example -sample',
                 '(site:console.aws.amazon.com | site:cloud.google.com | site:portal.azure.com) intext:"{domain}" "sign-in" -"login" -site:*.microsoft.com',
-                'inurl:/_ignition/execute-solution | /_ignition/share-report ext:php ("XSRF-TOKEN" | "POST") -site:laravel.com',
             ],
-            # ...
-            # Repeat for all other categories, mapping each of your queries to a logical group.
-            # For example: web_apps_admin, sensitive_files, network_infra, apis_devtools, auth_session, iot_surveillance, misc_critical, osint_info, software_services, cicd_automation, modern_frameworks, compliance_security, etc.
-            # ...
+            "error_messages": [
+                '(filetype:log | filetype:txt | filetype:cfg) ("error" | "failed" | "exception") ("password" | "pwd" | "token" | "key") ("POST" | "GET") filetype:log after:2023',
+                'intitle:"error" (intext:"stack trace" | intext:"traceback")',
+            ],
+            "source_code": [
+                '(inurl:/.git/ | /.svn/ | /.hg/) ("index of" | "parent directory") -gitolite -gitweb -inurl:/github.com/',
+                '(filetype:js | filetype:py | filetype:java | filetype:rb) ("api_key" | "token" | "password") -example',
+            ],
+            "database_exposure": [
+                '(filetype:sql | filetype:db | filetype:sqlite) ("CREATE TABLE" | "INSERT INTO") -test -dummy',
+                'inurl:phpmyadmin | inurl:adminer | inurl:dbadmin -localhost -127.0.0.1',
+            ],
+            "pii": [
+                '(filetype:xls | filetype:csv | filetype:pdf) ("email" | "phone" | "contact") -test -sample',
+                '(filetype:vcf | filetype:txt) ("@{domain}" | "employee" | "staff") -example',
+            ],
+            "subdomains": [
+                'site:*.{domain} -www.{domain}',
+                'site:{domain} (inurl:dev | inurl:test | inurl:staging | inurl:api)',
+            ],
+            "cloud_storage": [
+                'site:s3.amazonaws.com | site:blob.core.windows.net | site:storage.googleapis.com ("backup" OR "prod" OR "staging") ("{domain}" | "{domain_noprefix}") -inurl:.well-known',
+                'site:{domain} (inurl:/.aws/credentials | inurl:/credentials.json | inurl:/.config/gcloud/credentials) -site:github.com -site:gitlab.com',
+            ],
+            "apis_services": [
+                '(inurl:/api/v1 | /api/v2 | /graphql | /rest) (ext:json | ext:yaml) ("swagger" | "openapi" | "definition" | "docs") -github.io',
+                '(inurl:/api/ | /v1/ | /v2/) ("debug" | "test" | "sandbox") ("mode=debug" | "test=true") -production',
+            ],
+            "cms_frameworks": [
+                '(inurl:/wp-admin | /wp-login.php) ("user_login" | "log=" | "pwd=") -themes',
+                'intitle:"Joomla" | intitle:"Drupal" | inurl:/drupal',
+            ],
+            "network_info": [
+                '(filetype:conf | filetype:cfg | filetype:ini) ("internal" | "private" | "vpn") -example',
+                '(inurl:/cgi-bin/ | /goform/) (intitle:"Router" | "Device" | "Configuration")',
+            ],
+            "logs_reports": [
+                '(filetype:log | filetype:txt) ("access log" | "debug log" | "crash dump") -test -dummy',
+                '(filetype:csv | filetype:xlsx) ("report" | "export") -sample',
+            ],
+            "communications": [
+                '(filetype:vcf | filetype:eml) ("@{domain}" | "contact" | "support") -example',
+                '(filetype:txt | filetype:csv) ("email" | "phone") -test',
+            ],
+            "cached_data": [
+                'intitle:"Wayback Machine" | inurl:web.archive.org',
+                '(filetype:html | filetype:pdf) ("archive" | "cached")',
+            ],
+            "iot_devices": [
+                '(intitle:"Webcam" | intitle:"DVR" | intitle:"IP Camera") (inurl:/view | /snapshot | /image) -support -manual',
+                '(inurl:/printer | /webfig | /winbox) ("configuration" | "login")',
+            ],
+            "vulnerability_indicators": [
+                '(intitle:"index of" | inurl:/upload | inurl:/install | inurl:/setup) ("parent directory" | "Last modified") -example',
+                '(inurl:/test | /debug | /sandbox) ("debug" | "test") -production',
+            ],
+            "osint": [
+                '(filetype:pdf | filetype:doc | filetype:ppt) ("confidential" | "internal" | "proprietary") -public -news',
+                '(filetype:csv | filetype:xls) ("contact" | "employee" | "staff") ("phone" | "email") -test',
+            ],
+            "misconfigurations": [
+                '(intitle:"index of" "confidential" | "private") ("parent directory" | "Last modified")',
+                '(inurl:/public | /open | /exposed) (filetype:conf | filetype:env) -example',
+            ],
+            "internal_docs": [
+                '(filetype:pdf | filetype:docx) ("internal use only" | "confidential") -template -sample',
+                '(filetype:xlsx | filetype:pptx) ("restricted" | "not for distribution")',
+            ]
         }
     
     def generate_dorks(self, target_domain: str, scan_profile: str = "standard") -> List[Dict]:

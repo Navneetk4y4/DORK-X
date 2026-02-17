@@ -13,6 +13,8 @@ class Settings(BaseSettings):
 
     GOOGLE_API_KEY: Optional[str] = None
     GOOGLE_CSE_ID: Optional[str] = None
+    GOOGLE_API_KEY2: Optional[str] = None
+    GOOGLE_CSE_ID2: Optional[str] = None
     ALLOWED_ORIGINS: str = ""
     REPORT_STORAGE_PATH: Optional[str] = None
     BING_API_KEY: Optional[str] = None

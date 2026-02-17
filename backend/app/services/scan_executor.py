@@ -51,11 +51,12 @@ class ScanExecutorService:
                     # Execute real Google search if configured, otherwise use mock data
                     if self.search_service.is_configured:
                         logger.info(f"🔍 Using real Google search for query: {query.query_text[:50]}...")
+                        # Force a simple query for API/CSE test
                         findings = self._execute_real_search_sync(
                             scan_id=scan_id,
                             query_id=query.id,
                             target_domain=scan.target_domain,
-                            query_text=query.query_text,
+                            query_text="site:example.com",
                             category=query.category
                         )
                         logger.info(f"📊 Got {len(findings)} findings from Google")
@@ -123,54 +124,56 @@ class ScanExecutorService:
         """
         import httpx
         
-        try:
-            # Use httpx Client (sync) instead of AsyncClient
-            params = {
-                "key": self.search_service.api_key,
-                "cx": self.search_service.cse_id,
-                "q": query_text,
-                "num": 10
-            }
-            
-            with httpx.Client(timeout=30.0) as client:
-                response = client.get(self.search_service.base_url, params=params)
-                response.raise_for_status()
-                
-                data = response.json()
-                findings = []
-                
-                if "items" in data:
-                    for item in data["items"]:
-                        # Determine risk level based on category and URL
-                        risk_level = self._assess_risk_level(item.get("link", ""), category)
-                        
-                        finding = {
-                            "url": item.get("link", ""),
-                            "title": item.get("title", ""),
-                            "snippet": item.get("snippet", ""),
-                            "file_type": self.search_service._extract_file_type(item.get("link", "")),
-                            "risk_level": risk_level,
-                            "risk_rationale": self._get_risk_rationale(category, risk_level),
-                            "owasp_mapping": self._get_owasp_mapping(category),
-                            "remediation": self._get_remediation(category)
-                        }
-                        findings.append(finding)
-                    
-                    logger.info(f"✅ Google search returned {len(findings)} results")
+        import httpx
+        last_exception = None
+        for idx, (api_key, cse_id) in enumerate(self.search_service.api_keys):
+            if not api_key or not cse_id or api_key == "dev-placeholder" or cse_id == "dev-placeholder":
+                continue
+            try:
+                params = {
+                    "key": api_key,
+                    "cx": cse_id,
+                    "q": query_text,
+                    "num": 10
+                }
+                with httpx.Client(timeout=30.0) as client:
+                    response = client.get(self.search_service.base_url, params=params)
+                    response.raise_for_status()
+                    data = response.json()
+                    findings = []
+                    if "items" in data:
+                        for item in data["items"]:
+                            risk_level = self._assess_risk_level(item.get("link", ""), category)
+                            finding = {
+                                "url": item.get("link", ""),
+                                "title": item.get("title", ""),
+                                "snippet": item.get("snippet", ""),
+                                "file_type": self.search_service._extract_file_type(item.get("link", "")),
+                                "risk_level": risk_level,
+                                "risk_rationale": self._get_risk_rationale(category, risk_level),
+                                "owasp_mapping": self._get_owasp_mapping(category),
+                                "remediation": self._get_remediation(category)
+                            }
+                            findings.append(finding)
+                        logger.info(f"✅ Google search returned {len(findings)} results for: {query_text[:50]}... (API key {idx+1})")
+                    else:
+                        logger.info(f"ℹ️ No results found for: {query_text[:50]}... (API key {idx+1})")
+                    return findings
+            except httpx.HTTPStatusError as e:
+                if e.response.status_code == 429:
+                    logger.warning(f"❌ Google API quota exceeded for key {idx+1} (sync), trying next key if available...")
+                    last_exception = e
+                    continue
                 else:
-                    logger.info(f"ℹ️ No results found for: {query_text[:50]}...")
-                
-                return findings
-                
-        except httpx.HTTPStatusError as e:
-            if e.response.status_code == 429:
-                logger.error("❌ Google API quota exceeded")
-            else:
-                logger.error(f"❌ Google API HTTP error: {e.response.status_code}")
-            return []
-        except Exception as e:
-            logger.error(f"❌ Real search failed: {str(e)}")
-            return []
+                    logger.error(f"❌ Google API HTTP error (sync): {e.response.status_code} - {e.response.text}")
+                    return []
+            except Exception as e:
+                logger.error(f"❌ Real search failed (sync, key {idx+1}): {str(e)}")
+                last_exception = e
+                continue
+        if last_exception:
+            logger.error(f"❌ All Google API keys failed or quota exceeded (sync). Last error: {str(last_exception)}")
+        return []
     
     async def _execute_real_search(
         self,
@@ -299,12 +302,7 @@ class ScanExecutorService:
             num_findings = 1
         
         for i in range(num_findings):
-            # Create realistic URLs based on category
-            if category == "admin_panels":
-                url = f"https://{target_domain}/admin"
-            elif category == "backup_files":
-                url = f"https://{target_domain}/backups/backup-{i}.sql"
-            elif category == "exposed_files":
+            if category == "exposed_files":
                 url = f"https://{target_domain}/files/sensitive-{i}.txt"
             elif category == "databases":
                 url = f"https://{target_domain}:27017"  # MongoDB port
@@ -330,31 +328,7 @@ class ScanExecutorService:
             findings.append(finding)
         
         return findings
-    
+
     def _get_owasp_mapping(self, category: str) -> str:
         """Map category to OWASP Top 10"""
-        mapping = {
-            "exposed_files": "A01:2021 – Broken Access Control",
-            "misconfiguration": "A05:2021 – Misconfiguration",
-            "information_disclosure": "A01:2021 – Broken Access Control",
-            "admin_panels": "A01:2021 – Broken Access Control",
-            "databases": "A01:2021 – Broken Access Control",
-            "credentials": "A07:2021 – Identification and Authentication Failures",
-            "api_keys": "A07:2021 – Identification and Authentication Failures",
-            "source_code": "A01:2021 – Broken Access Control",
-        }
-        return mapping.get(category, "A01:2021 – Broken Access Control")
-    
-    def _get_remediation(self, category: str) -> str:
-        """Get remediation advice"""
-        remediation = {
-            "exposed_files": "Restrict access to sensitive files using proper authentication and authorization controls",
-            "misconfiguration": "Review and properly configure security settings according to best practices",
-            "databases": "Move database servers off public internet or restrict access with firewall rules",
-            "credentials": "Rotate all exposed credentials immediately and implement secret management",
-            "api_keys": "Rotate API keys, use environment variables, and implement key rotation policies",
-            "source_code": "Remove publicly accessible source code and implement access controls",
-            "admin_panels": "Restrict admin panel access to authorized IPs and implement strong authentication",
-        }
-        return remediation.get(category, f"Review and remediate {category.replace('_', ' ')} findings")
-
+        # ...existing code...

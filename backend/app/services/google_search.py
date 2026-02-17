@@ -15,20 +15,20 @@ class GoogleSearchService:
     """
     
     def __init__(self):
-        self.api_key = settings.GOOGLE_API_KEY
-        self.cse_id = settings.GOOGLE_CSE_ID
+        self.api_keys = [
+            (settings.GOOGLE_API_KEY, settings.GOOGLE_CSE_ID),
+            (getattr(settings, 'GOOGLE_API_KEY2', None), getattr(settings, 'GOOGLE_CSE_ID2', None))
+        ]
         self.base_url = "https://www.googleapis.com/customsearch/v1"
         self.is_configured = self._check_configuration()
     
     def _check_configuration(self) -> bool:
-        """Check if API credentials are properly configured"""
-        if not self.api_key or self.api_key == "dev-placeholder":
-            logger.warning("⚠️ Google API key not configured - using mock data")
-            return False
-        if not self.cse_id or self.cse_id == "dev-placeholder":
-            logger.warning("⚠️ Google CSE ID not configured - using mock data")
-            return False
-        return True
+        """Check if at least one set of API credentials is properly configured"""
+        for api_key, cse_id in self.api_keys:
+            if api_key and api_key != "dev-placeholder" and cse_id and cse_id != "dev-placeholder":
+                return True
+        logger.warning("⚠️ No valid Google API key/CSE ID configured - using mock data")
+        return False
     
     async def search(self, query: str, num_results: int = 10) -> List[Dict]:
         """
@@ -44,48 +44,53 @@ class GoogleSearchService:
         if not self.is_configured:
             logger.warning(f"🔍 Mock search for: {query}")
             return []
-        
-        try:
-            params = {
-                "key": self.api_key,
-                "cx": self.cse_id,
-                "q": query,
-                "num": min(num_results, 10)  # Google allows max 10 per request
-            }
-            
-            async with httpx.AsyncClient(timeout=30.0) as client:
-                response = await client.get(self.base_url, params=params)
-                response.raise_for_status()
-                
-                data = response.json()
-                results = []
-                
-                if "items" in data:
-                    for item in data["items"]:
-                        result = {
-                            "url": item.get("link", ""),
-                            "title": item.get("title", ""),
-                            "snippet": item.get("snippet", ""),
-                            "file_type": self._extract_file_type(item.get("link", "")),
-                            "display_link": item.get("displayLink", "")
-                        }
-                        results.append(result)
-                    
-                    logger.info(f"✅ Google search returned {len(results)} results for: {query[:50]}...")
+
+        last_exception = None
+        for idx, (api_key, cse_id) in enumerate(self.api_keys):
+            if not api_key or not cse_id or api_key == "dev-placeholder" or cse_id == "dev-placeholder":
+                continue
+            try:
+                params = {
+                    "key": api_key,
+                    "cx": cse_id,
+                    "q": query,
+                    "num": min(num_results, 10)
+                }
+                async with httpx.AsyncClient(timeout=30.0) as client:
+                    response = await client.get(self.base_url, params=params)
+                    response.raise_for_status()
+                    data = response.json()
+                    results = []
+                    if "items" in data:
+                        for item in data["items"]:
+                            result = {
+                                "url": item.get("link", ""),
+                                "title": item.get("title", ""),
+                                "snippet": item.get("snippet", ""),
+                                "file_type": self._extract_file_type(item.get("link", "")),
+                                "display_link": item.get("displayLink", "")
+                            }
+                            results.append(result)
+                        logger.info(f"✅ Google search returned {len(results)} results for: {query[:50]}... (API key {idx+1})")
+                    else:
+                        logger.info(f"ℹ️ No results found for: {query[:50]}... (API key {idx+1})")
+                    return results
+            except httpx.HTTPStatusError as e:
+                if e.response.status_code == 429:
+                    logger.warning(f"❌ Google API quota exceeded for key {idx+1}, trying next key if available...")
+                    last_exception = e
+                    continue
                 else:
-                    logger.info(f"ℹ️ No results found for: {query[:50]}...")
-                
-                return results
-                
-        except httpx.HTTPStatusError as e:
-            if e.response.status_code == 429:
-                logger.error("❌ Google API quota exceeded")
-            else:
-                logger.error(f"❌ Google API HTTP error: {e.response.status_code} - {e.response.text}")
-            return []
-        except Exception as e:
-            logger.error(f"❌ Google search failed: {str(e)}")
-            return []
+                    logger.error(f"❌ Google API HTTP error: {e.response.status_code} - {e.response.text}")
+                    return []
+            except Exception as e:
+                logger.error(f"❌ Google search failed (key {idx+1}): {str(e)}")
+                last_exception = e
+                continue
+        # If all keys fail
+        if last_exception:
+            logger.error(f"❌ All Google API keys failed or quota exceeded. Last error: {str(last_exception)}")
+        return []
     
     def _extract_file_type(self, url: str) -> Optional[str]:
         """Extract file type from URL"""
@@ -110,8 +115,8 @@ class GoogleSearchService:
         """Get API quota information"""
         return {
             "is_configured": self.is_configured,
-            "api_key_set": bool(self.api_key and self.api_key != "dev-placeholder"),
-            "cse_id_set": bool(self.cse_id and self.cse_id != "dev-placeholder"),
-            "daily_limit": 100,  # Google free tier limit
-            "note": "Google Custom Search API has 100 queries/day on free tier"
+            "api_keys_configured": [bool(api_key and api_key != "dev-placeholder") for api_key, _ in self.api_keys],
+            "cse_ids_configured": [bool(cse_id and cse_id != "dev-placeholder") for _, cse_id in self.api_keys],
+            "daily_limit_per_key": 100,  # Google free tier limit
+            "note": "Google Custom Search API has 100 queries/day per key on free tier. Will auto-failover to second key if first is exhausted."
         }
